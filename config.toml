@@ -1,10 +1,8 @@
 baseurl = "https://sumerc.github.io"
 languageCode = "en-us"
-title = "Sümer Cip"
+title = "Welcome! | Sümer Cip"
 theme = "hugo-tania"
 paginate = 6
-
-disqusShortname = "https-hugo-tania-netlify-app"
 
 [params]
   # Emoji will show before the blog title on site navbar.
@@ -17,9 +15,9 @@ disqusShortname = "https-hugo-tania-netlify-app"
   # Default to true
   enableFootnotes = true
 
-  siteName = "Hugo Tania is Amazing"
-  siteDesc = "Hugo is Absurdly Fast!"
-  author = "Hugo Tania"
+  siteName = "Sümer Cip's blog"
+  siteDesc = "Sümer Cip's blog"
+  author = "Sümer Cip"
 
   [params.colorScheme]
     # Enable toggle colorScheme
@@ -38,14 +36,14 @@ disqusShortname = "https-hugo-tania-netlify-app"
     dev-to = ""
     email = "sumerc@gmail.com"
     facebook = ""
-    github = "github.com/sumerc"
+    github = "https://github.com/sumerc"
     instagram = ""
     linkedin = ""
     medium = ""
     stack-overflow = ""
     steam = ""
     telegram = ""
-    twitter = "twitter.com/sumercip"
+    twitter = "https://twitter.com/sumercip"
     twitch = ""
     whatsapp = ""
   
@@ -65,6 +63,7 @@ disqusShortname = "https-hugo-tania-netlify-app"
 [markup]
 [markup.highlight]
   noClasses = false
+  style = 'monokai'
   lineNos = true
 [markup.goldmark.renderer]
   unsafe = true
