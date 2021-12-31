@@ -7,7 +7,7 @@ draft: false
 # My shell is slooow!
 
 This is my first blog post for years. I have been finding excuses for not writing one over 
-the years, but I feel this is the right time. Anyway :)
+the years, but I feel this is the right time.
 
 I was coding as usual when I started something odd with my shell. I have done few adjustments
 to my `.zshrc` file and out of a sudden it became very slow to spawn a new shell. As a person
@@ -42,7 +42,9 @@ eval "$(pyenv init --path)"
 
 As you can see, I am frequently jumping between different versions of Node/Python/Ruby. That is
 because my day-to-day job is basically writing/learning profilers/tracing tools for different 
-languages so... Anyway, when I comment out those, the startup decreases to `0.153` from `2.077`.
+languages. 
+
+When I comment out above code, the startup time decreases to `0.153` from `2.077`.
 
 # `lazyload` extension to the rescue
 
@@ -66,7 +68,11 @@ lazyload pyenv -- 'export PATH=$PYENV_ROOT/bin:$PATH
 
 Which was exactly what I needed!
 
+My full `.zshrc` file: https://github.com/sumerc/dotfiles/blob/main/zshrc
+
+And the `zsh-lazyload` extension: https://github.com/qoomon/zsh-lazyload
+
 # One final thought
 
 Right now, I am really wondering why these tools provide this kind of lazy-loading by default.
-It seems far better practice. Especially for guys having to install lots of different tools.
+It seems far better practice. Especially for people having to install lots of different tools.
