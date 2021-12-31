@@ -21,6 +21,7 @@ DefaultContentLanguage = "en"
 [params]
 extraHead = ''
 mainSections = ["posts"]
+description = "My notes on random stuff I am working on"
 
 [[params.socials]]
 name = "RSS"
