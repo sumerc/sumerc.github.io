@@ -6,7 +6,7 @@ draft: false
 
 deneme
 
-{{< highlight python "linenos=table,hl_lines=0-4,linenostart=199" >}}
+{{< highlight python >}}
 async def do_http_req():
     async with aiohttp.ClientSession() as session:
         async with session.get('http://python.org') as response:

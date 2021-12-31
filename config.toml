@@ -4,9 +4,19 @@ title = "Welcome! | Sümer Cip"
 theme = "yinyang"
 DefaultContentLanguage = "en"
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    guessSyntax = true
+    noClasses = true
+    style = "friendly"
+    tabWidth = 2
+
 [author]
   name = "Sümer Cip"
-  homepage = "https://joway.io/"
+  homepage = "https://sumerc.github.io/"
 
 [params]
 extraHead = ''
