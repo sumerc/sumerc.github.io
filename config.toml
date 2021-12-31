@@ -1,72 +1,29 @@
-baseurl = "https://sumerc.github.io"
+baseURL = "https://sumerc.github.io"
 languageCode = "en-us"
-title = "Sümer Cip"
-theme = "hugo-tania"
-paginate = 9
+title = "Welcome! | Sümer Cip"
+theme = "yinyang"
+DefaultContentLanguage = "en"
+
+[author]
+  name = "Sümer Cip"
+  homepage = "https://joway.io/"
 
 [params]
-  # Emoji will show before the blog title on site navbar.
-  titleEmoji  = "😎"
+extraHead = ''
+mainSections = ["posts"]
 
-  # Logo will show before the blog title on site navbar.
-  titleLogo = ""
+[[params.socials]]
+name = "RSS"
+link = "/index.xml"
 
-  # Enable float footnotes.
-  # Default to true
-  enableFootnotes = true
+[[params.socials]]
+name = "About"
+link = "/about"
 
-  siteName = "Sümer Cip's blog"
-  siteDesc = "Sümer Cip's blog"
-  author = "Sümer Cip"
+[[params.socials]]
+name = "Github"
+link = "https://github.com/sumerc"
 
-  [params.colorScheme]
-    # Enable toggle colorScheme
-    # Default to true
-    toggle = true
-    # Default colorScheme
-    # Default to auto
-    #default = auto
-
-  # Limit how many categories filter show above search input.
-  # Default to 5
-  maxCategoryToShow = 10
-
-  # Show your social information with icon on index bio with `_index.md` content.
-  [params.socialOptions]
-    dev-to = ""
-    email = "sumerc@gmail.com"
-    facebook = ""
-    github = "https://github.com/sumerc"
-    instagram = ""
-    linkedin = ""
-    medium = ""
-    stack-overflow = ""
-    steam = ""
-    telegram = ""
-    twitter = "https://twitter.com/sumercip"
-    twitch = ""
-    whatsapp = ""
-  
-  # Comments settigns
-  [params.comments]
-    enabled = false
-    provider = "disqus"
-
-[menu]
-[[menu.header]]
-  name = "Articles"
-  url = "/articles/"
-[[menu.footer]]
-    name = "RSS"
-    url = "/index.xml"
-
-[markup]
-[markup.highlight]
-  noClasses = false
-  style = 'monokai'
-  lineNos = true
-[markup.goldmark.renderer]
-  unsafe = true
-
-[outputs]
-  home = ["HTML", "RSS", "JSON"]
+[[params.socials]]
+name = "Twitter"
+link = "https://twitter.com/sumercip"
