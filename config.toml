@@ -1,8 +1,8 @@
 baseurl = "https://sumerc.github.io"
 languageCode = "en-us"
-title = "Welcome! | Sümer Cip"
+title = "Sümer Cip"
 theme = "hugo-tania"
-paginate = 6
+paginate = 9
 
 [params]
   # Emoji will show before the blog title on site navbar.
