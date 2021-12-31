@@ -1,4 +1,4 @@
-baseurl = "https://example.com"
+baseurl = "https://sumerc.github.io"
 languageCode = "en-us"
 title = "Sümer Cip"
 theme = "hugo-tania"
