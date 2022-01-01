@@ -1,0 +1,3 @@
+[submodule "themes/my_yinyang"]
+	path = themes/my_yinyang
+	url = https://github.com/sumerc/hugo-theme-yinyang.git
