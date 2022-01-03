@@ -44,7 +44,7 @@ eval "$(pyenv init --path)"
 As you can see, I am frequently using `nvm`, `rvm` and `pyenv`. That is because my day-to-day job requires jumping between 
 different versions of Node/Python/Ruby currently.
 
-When I comment out above code, the startup time decreases to `0.153` from `2.077`.
+When I comment out above code, the startup time decreases to `0.153` from `2.077` :)
 
 # `lazyload` extension to the rescue
 
