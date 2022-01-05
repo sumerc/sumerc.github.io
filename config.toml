@@ -25,10 +25,6 @@ mainSections = ["posts"]
 description = "My notes on random stuff about programming"
 
 [[params.socials]]
-name = "RSS"
-link = "/index.xml"
-
-[[params.socials]]
 name = "About"
 link = "/about"
 
@@ -39,3 +35,7 @@ link = "https://github.com/sumerc"
 [[params.socials]]
 name = "Twitter"
 link = "https://twitter.com/sumercip"
+
+[[params.socials]]
+name = "RSS"
+link = "/index.xml"
