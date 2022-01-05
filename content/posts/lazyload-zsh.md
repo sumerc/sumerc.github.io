@@ -73,5 +73,5 @@ And the `zsh-lazyload` extension: https://github.com/qoomon/zsh-lazyload
 
 # One final thought
 
-Right now, I am really wondering why these tools provide this kind of lazy-loading by default.
-It seems far better practice. Especially for people that have to install lots of different tools.
+Right now, I am really wondering why these tools do not provide this kind of lazy-loading by default.
+It seems far better practice especially for people that have to install lots of different tools.
