@@ -12,7 +12,7 @@ staticDir = ['static']
   [markup.highlight]
     guessSyntax = true
     noClasses = true
-    style = "friendly"
+    style = "github"
     tabWidth = 2
 
 [author]
