@@ -22,7 +22,7 @@ staticDir = ['static']
 [params]
 extraHead = ''
 mainSections = ["posts"]
-description = "My notes on random stuff I am working on"
+description = "My notes on random stuff about programming"
 
 [[params.socials]]
 name = "RSS"
