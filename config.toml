@@ -1,4 +1,4 @@
-baseURL = "https://sumerc.github.io"
+baseURL = "https://sumercip.com"
 languageCode = "en-us"
 title = "Welcome! | Sümer Cip"
 theme = "my_yinyang"
@@ -17,7 +17,7 @@ staticDir = ['static']
 
 [author]
   name = "Sümer Cip"
-  homepage = "https://sumerc.github.io/"
+  homepage = "https://sumercip.com/"
 
 [params]
 extraHead = ''
