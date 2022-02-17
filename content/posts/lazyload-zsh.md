@@ -31,8 +31,8 @@ lag.
 After a while, I found 3 things:
 
 {{< highlight shell >}}
-[ -s "$NVM_ROOT/nvm.sh" ] && \. "$NVM_ROOT/nvm.sh"  # This loads nvm
-[ -s "$NVM_ROOT/bash_completion" ] && \. "$NVM_ROOT/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_ROOT/nvm.sh" ] && \. "$NVM_ROOT/nvm.sh"
+[ -s "$NVM_ROOT/bash_completion" ] && \. "$NVM_ROOT/bash_completion"
 
 export PATH=$RVM_ROOT/bin:$PATH
 source $RVM_ROOT/scripts/rvm
@@ -55,8 +55,8 @@ There is a extension called `lazyload` that takes a command and do the initializ
 when you need them. Within few minutes, I arrived at following code:
 
 {{< highlight shell >}}
-lazyload nvm -- '[ -s "$NVM_ROOT/nvm.sh" ] && \. "$NVM_ROOT/nvm.sh"  # This loads nvm
-    [ -s "$NVM_ROOT/bash_completion" ] && \. "$NVM_ROOT/bash_completion"  # This loads nvm bash_completion'
+lazyload nvm -- '[ -s "$NVM_ROOT/nvm.sh" ] && \. "$NVM_ROOT/nvm.sh"
+    [ -s "$NVM_ROOT/bash_completion" ] && \. "$NVM_ROOT/bash_completion"'
 
 lazyload rvm -- 'export PATH=$RVM_ROOT/bin:$PATH
     source $RVM_ROOT/scripts/rvm'
