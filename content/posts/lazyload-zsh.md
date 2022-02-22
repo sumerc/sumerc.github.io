@@ -45,7 +45,7 @@ different versions of Node/Python/Ruby currently.
 
 When I comment out above code, the startup time decreases to `0.153` from `2.077` :)
 
-# `lazyload` extension to the rescue
+# lazyload extension to the rescue
 
 Most of the time, I don't need these stuff to be initialized at all. However, I need them
 when I need them.
