@@ -4,16 +4,14 @@ title = "Welcome! | Sümer Cip"
 theme = "my_yinyang"
 DefaultContentLanguage = "en"
 staticDir = ['static']
+pygmentsUseClasses = true
+pygmentsCodefences = true
 
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
-  [markup.highlight]
-    guessSyntax = true
-    noClasses = true
-    style = "github"
-    tabWidth = 2
+[markup.highlight]
+  guessSyntax = true
+  lineNoStart = 1
+  lineNos = true
+  tabWidth = 2
 
 [author]
   name = "Sümer Cip"
