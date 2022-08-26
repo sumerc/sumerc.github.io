@@ -4,7 +4,7 @@ date: 2022-08-26T20:03:25+03:00
 draft: true
 ---
 
-# Intro
+# intro
 
 It is safe to say that Go is one of its kind when it comes to profiling: Go runtime 
 includes powerful and opiniated(!) profilers inside the runtime. In other languages like
@@ -18,7 +18,7 @@ myself how Go CPU profiler works under the hood. So I started teaching myself ho
 then it turned into sharing this journey in a blog post. There is no such time, I did not find myself learning new things
 when I read Go runtime and this was no exception. 
 
-# Fundamentals
+# basics
 
 There are two types of profilers:
  1. tracing : xxx
@@ -29,9 +29,11 @@ Every sampling profiler consists two basic parts:
 2. data collection
 
 Sampler triggers a callback at certain intervals and this callback collects profiling data(usually a stack trace).Different
-profilers use different strategies to trigger the sampling interval:
+profilers use different strategies to trigger the sampling interval.
 
-Linux `perf` uses `PMU` counters to trigger the data collection callback. And it uses `perf_event_open(PERF_SAMPLE_STACK_USER,...)`
+Few examples:
+
+Linux `perf` uses `PMU` counters to trigger the data collection callback. XXX: More info. And it uses `perf_event_open(PERF_SAMPLE_STACK_USER,...)`
 to obtain stack trace information. The captured stack traces are written to userspace via mmap'd ring buffer...
 
 [`pyspy`](xxx) and [`rbspy`](xxx) are famous sampling profilers for Python and Ruby. They both ran as external processes and they periodically
