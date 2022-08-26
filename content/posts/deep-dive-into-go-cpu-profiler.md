@@ -31,7 +31,7 @@ Every sampling profiler consists two basic parts:
 Sampler triggers a callback at certain intervals and this callback collects profiling data(usually a stack trace).Different
 profilers use different strategies to trigger the sampling interval.
 
-Few examples:
+# few examples
 
 Linux `perf` uses `PMU` counters to trigger the data collection callback. XXX: More info. And it uses `perf_event_open(PERF_SAMPLE_STACK_USER,...)`
 to obtain stack trace information. The captured stack traces are written to userspace via mmap'd ring buffer...
@@ -41,6 +41,8 @@ read the target application memory to capture the stack trace of running threads
 this API pauses the target application for few miliseconds during memory read. Then they chase pointers inside the memory they read to find the
 current running thread structure and stack trace information. As you might guess, this is a error prone and complex approach but works 
 surprisingly well. IIRC, [`pyflame`](https://github.com/uber-archive/pyflame) uses similar approach too.
+
+parca and few more upcoming?/recent profilers use eBPF.
 
 Go CPU profiler is a sampling profiler. In Linux, Go runtime uses `setitimer`/`timer_create?` APIs to set up a callback that is triggered at specific intervals that is controlled
 by SetCPUProfileRate() which is 100Mz (10ms) by default.
