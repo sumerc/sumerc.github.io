@@ -7,10 +7,10 @@ draft: true
 # intro
 
 It is safe to say that Go is one of its kind when it comes to profiling: Go runtime 
-includes powerful and opiniated(!) profilers inside the runtime. In other languages like
-Ruby, Python or Node.js there are some basic profilers and few APIs for writing 
-profilers. In Go, however, runtime is pretty generous when it comes to observability tools. If you want to
-learn more about the types of profilers, tracing tools that Go has, I highly recommend Felix Geisendörfer's
+includes powerful and opinionated(!) profilers inside the runtime. In other languages like
+Ruby, Python, or Node.js, the standard library includes profilers or at least a few APIs for writing 
+profilers, but those are very limited in scope compared to what Go offers out of the box. In Go, the runtime is pretty generous regarding observability tools. If you want to
+learn more about the types of profilers, and tracing tools that Go has, I highly recommend Felix Geisendörfer's
 [The Busy Developer's Guide to Go Profiling, Tracing and Observability](https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md)
 
 As a curious engineer, I love to dig deep on how things work at a low level and I have always wanted to teach 
@@ -36,8 +36,7 @@ profilers use different strategies to trigger the sampling interval.
 
 # few examples
 
-Linux `perf` uses `PMU` counters to trigger the data collection. There is an [awesome article](https://easyperf.net/blog/2018/06/01/PMU-counters-and-profiling-basics) written by Denis Bakhvalov that explains how tools like `perf`, `VTune` use PMU counters to make this happen. 
-Once the data collection callback is triggered at regular intervals, all is left to collect stack traces and aggregate them properly. To be complete, Linux `perf` uses `perf_event_open(PERF_SAMPLE_STACK_USER,...)` to obtain stack trace information. The captured stack traces are written to userspace via mmap'd ring buffer...
+Linux `perf` uses `PMU`(Performance Monitor Unit) counters for sampling. In summary, you can instruct the PMU to generate an interrupt after some PMU event happens N times. An example might be to tick in every 1000 CPU clock cycles. There is a [detailed article](https://easyperf.net/blog/2018/06/01/PMU-counters-and-profiling-basics) written by Denis Bakhvalov that explains how tools like `perf`, `VTune` use PMU counters to make this happen. Once the data collection callback is triggered at regular intervals, all is left to collect stack traces and aggregate them properly. To be complete, Linux `perf` uses `perf_event_open(PERF_SAMPLE_STACK_USER,...)` to obtain stack trace information. The captured stack traces are written to userspace via mmap'd ring buffer...
 
 [`pyspy`](https://github.com/benfred/py-spy) and [`rbspy`](https://github.com/rbspy/rbspy) are famous sampling profilers for Python and Ruby. They both ran as external processes and they periodically read the target application memory to capture the stack trace of running threads. In Linux, they use `process_vm_readv` and if I am not mistaken this API pauses the target application for few miliseconds during memory read. Then they chase pointers inside the memory they read to find the current running thread structure and stack trace information. As you might guess, this is a error prone and complex approach but works surprisingly well. IIRC, [`pyflame`](https://github.com/uber-archive/pyflame) uses similar approach too.
 
