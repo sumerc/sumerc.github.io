@@ -8,7 +8,7 @@ draft: true
 
 It is safe to say that Go is one of its kind when it comes to profiling: Go runtime 
 includes powerful and opinionated(!) profilers inside the runtime. In other languages like
-Ruby, Python, or Node.js, the standard library includes profilers or at least a few APIs for writing 
+Ruby, Python, or Node.js, the standard library contains profilers or at least a few APIs for writing 
 profilers, but those are very limited in scope compared to what Go offers out of the box. In Go, the runtime is pretty generous regarding observability tools. If you want to
 learn more about the types of profilers, and tracing tools that Go has, I highly recommend Felix Geisendörfer's
 [The Busy Developer's Guide to Go Profiling, Tracing and Observability](https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md)
