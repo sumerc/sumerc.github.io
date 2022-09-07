@@ -18,7 +18,7 @@ myself how Go CPU profiler works under the hood. So I started teaching myself ho
 then it turned into sharing this journey in a blog post. There is no such time, I did not find myself learning new things
 when I read Go runtime and this was no exception. 
 
-# basics
+# Basics
 
 There are two types of profilers:
  1. tracing : do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
@@ -34,7 +34,7 @@ Every sampling profiler consists two basic parts:
 Sampler triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
 profilers use different strategies to trigger the sampling interval.
 
-# few examples
+# How other profilers work?
 
 Linux `perf` uses `PMU`(Performance Monitor Unit) counters for sampling. In summary, you can instruct the PMU to generate an interrupt after some PMU event happens N times. An example might be to tick in every 1000 CPU clock cycles. There is a [detailed article](https://easyperf.net/blog/2018/06/01/PMU-counters-and-profiling-basics) written by Denis Bakhvalov that explains how tools like `perf`, `VTune` use PMU counters to make this happen. Once the data collection callback is triggered at regular intervals, all is left to collect stack traces and aggregate them properly. To be complete, Linux `perf` uses `perf_event_open(PERF_SAMPLE_STACK_USER,...)` to obtain stack trace information. The captured stack traces are written to userspace via mmap'd ring buffer...
 
@@ -45,7 +45,7 @@ parca and few more upcoming profilers use [eBPF](https://ebpf.io/). eBPF is a re
 I think you get the idea: although there are various strategies to implement a sampling profiler under the hood, the underlying ideas/patterns stays same:
 setup a periodic handler and read/aggregate stack trace data.
 
-## Go CPU profiler sampler
+## Triggering `SIGPROF` signal
 
 Let's reiterate again: Go CPU profiler is a sampling profiler. In Linux, Go runtime uses `setitimer`/`timer_create/timer_settime` APIs to set up a `SIGPROF` signal handler. This handler is triggered at periodic intervals that is controlled by `runtime.SetCPUProfileRate` which is `100Mz(10ms)` by default. As a side note: surprisingly, there were some serious issues around the sampler of the Go CPU profiler until Go 1.18! You can see the gory details on the problems around it [here](https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/). As a brief summary, What I understand from the article is: `setitimer` API was the recommended way of triggering time based signals per-thread in Linux but it was not working as advertised. Please feel free to correct me if this claim is wrong. 
 
@@ -64,3 +64,12 @@ A simple visualization on how the Go CPU profiler sampler works:
 
 ![SIGPROF signal in the Go runtime](/sigprof.png)
 
+## `SIGPROF` handler
+
+Kernel sends a `SIGPROF` signal to one of the running threads in the application. This interrupts the running
+thread(goroutine) and the `SIGPROF` signal handler is invoked. One of the first things that the signal handler does is to disable memory allocation. The profiler
+code path does not involve any allocation or locks. This constraints keeps profiler's overhead as deterministic as possible. It becomes highly unlikely 
+that the overhead of profiling causes any stalls or deadlocks. After disabling memory allocations, the `SIGPROF` handler retrieves the stack trace of
+the interrupted goroutine. This stack trace is then saved into a lock-free log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(if there is any). This lock-free structure is named as `profBuf`. It is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. In short: it is a lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure that is safe to be used by a single writer and reader. The writer is the profiler signal handler and the reader is a goroutine that periodically reads this buffer and aggregates results to a final hashmap structure.
+
+One of the things I love about this design is that it proves how well you can optimize code depends on how well you understand the access patterns of your underlying data structures. In this case, a lock-free structure is used even though it might be a complete overkill for most of the time.
