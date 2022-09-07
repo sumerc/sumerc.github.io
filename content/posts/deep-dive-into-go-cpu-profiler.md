@@ -45,7 +45,7 @@ Recent profilers like [Parca](parca.dev) and few others use [eBPF](https://ebpf.
 I think you get the idea: although there are various strategies to implement a sampling profiler under the hood, the underlying ideas/patterns stays same:
 setup a periodic handler and read/aggregate stack trace data.
 
-## How `SIGPROF` signal is triggered?
+## How the profiler is triggered periodically?
 
 Let's reiterate again: Go CPU profiler is a sampling profiler. In Linux, Go runtime uses `setitimer`/`timer_create/timer_settime` APIs to set up a `SIGPROF` signal handler. This handler is triggered at periodic intervals that is controlled by `runtime.SetCPUProfileRate` which is `100Mz(10ms)` by default. As a side note: surprisingly, there were some serious issues around the sampler of the Go CPU profiler until Go 1.18! You can see the gory details on the problems around it [here](https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/). As a brief summary, What I understand from the article is: `setitimer` API was the recommended way of triggering time based signals per-thread in Linux but it was not working as advertised. Please feel free to correct me if this claim is wrong. 
 
@@ -64,7 +64,7 @@ A simple visualization on how the Go CPU profiler sampler works:
 
 ![SIGPROF signal in the Go runtime](/sigprof.png)
 
-## `SIGPROF` handler
+## How profiler collects data?
 
 Kernel sends a `SIGPROF` signal to one of the running threads in the application. This interrupts the running
 thread(goroutine) and the `SIGPROF` signal handler is invoked. One of the first things that the signal handler does is to disable memory allocation. The profiler
