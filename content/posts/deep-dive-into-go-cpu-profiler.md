@@ -68,7 +68,7 @@ A simple visualization on how the Go CPU profiler sampler works:
 
 Kernel sends a `SIGPROF` signal to one of the running threads in the application. This interrupts the running
 thread(goroutine) and the `SIGPROF` signal handler is invoked. One of the first things that the signal handler does is to disable memory allocation. The profiler
-code path does not involve any allocation or locks. These constraints helps keeping profiler overhead low and predictable. It is highly unlikely 
+code path does not involve any allocation or locks, this helps keeping profiler overhead low and predictable. It is highly unlikely 
 that the overhead of profiling causes any stalls or deadlocks. After disabling memory allocations, the `SIGPROF` handler retrieves the stack trace of
 the interrupted goroutine. This stack trace is then saved into a lock-free log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(if there is any). This lock-free structure is named as `profBuf`. It is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. In short: it is a lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure that is safe to be used by a single writer and reader. The writer is the profiler signal handler and the reader is a goroutine that periodically reads this buffer and aggregates results to a final hashmap structure.
 
