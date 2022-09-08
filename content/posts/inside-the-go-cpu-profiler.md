@@ -1,5 +1,5 @@
 ---
-title: "Deep dive into the Go CPU profiler"
+title: "Inside the Go CPU profiler"
 date: 2022-08-26T20:03:25+03:00
 draft: true
 ---
