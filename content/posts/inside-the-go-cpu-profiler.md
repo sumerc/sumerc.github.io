@@ -4,6 +4,7 @@ date: 2022-08-26T20:03:25+03:00
 draft: true
 ---
 
+
 # Introduction
 
 It is safe to say that Go is one of its kind when it comes to profiling: Go runtime 
@@ -21,18 +22,16 @@ when I read Go runtime and this was no exception.
 # Basics
 
 There are two types of profilers:
- 1. tracing : do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
- 2. sampling : do measurements at regular intervals.
+ 1. **tracing**: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
+ 2. **sampling**: do measurements at regular intervals.
 
  Go CPU profiler is a sampling profiler. There is also a [Go execution tracer](https://pkg.go.dev/runtime/trace) which is 
  tracing profiler and traces certain events like acquiring a Lock, GC related events...etc
 
 Every sampling profiler consists two basic parts:
-1. sampler
-2. data collection
-
-Sampler triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
+1. **sampler**: triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
 profilers use different strategies to trigger the sampling interval.
+2. **data collection**: this is where profiler collects its data: it might be memory consumption, call count. Basically any metric that can be associated with a stack trace.
 
 # How other profilers work?
 
@@ -52,6 +51,10 @@ Let's reiterate again: Go CPU profiler is a sampling profiler. In Linux, Go runt
 Let's see how you can enable the Go CPU profiler manually:
 
 ```go
+f, err := os.Create("profile.pb.gz")
+if err != nil {
+    log.Fatal(...)
+}
 if err := pprof.StartCPUProfile(f); err != nil {
     ...
 }
@@ -66,22 +69,26 @@ A simple visualization on how the Go CPU profiler sampler works:
 
 # How profiler collects data?
 
-Kernel sends a `SIGPROF` signal to one of the running threads in the application. This interrupts the running thread(goroutine) and the `SIGPROF` signal handler is invoked. One of the first things that the signal handler does is to disable memory allocation. The profiler code path does not involve any allocation or locks, this helps keeping profiler overhead low and predictable and with probably additional benefits. Even the maximum depth of stack trace is predefined: as of Go `1.19` it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22).
-
-The `SIGPROF` handler continues execution by retrieving the stack trace of the interrupted goroutine. This stack trace is then saved into a lock-free log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf`. It is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. In short: it is a lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure that is safe to be used by a single writer and reader which highly resembles http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf. The writer is the profiler signal handler and the reader is a goroutine that periodically reads this buffer and aggregates results to a final hashmap structure. 
-
-This hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
+Kernel sends a `SIGPROF` signal to one of the running threads in the application. This interrupts the running thread(goroutine) and the `SIGPROF` signal handler is invoked. The stack trace of the interrupted goroutine is retrieved in the context of this signal handler. This stack trace is then saved into a lock-free log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf` and it is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. To summarize it up: it is a lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure that is safe to be used by a **single writer** and a **single reader** which highly resembles http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf. The writer is the profiler signal handler and the reader is a goroutine(`profileWriter`) that periodically reads this buffer and aggregates results to a final hashmap structure in a separate goroutine. This hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
 
 Here is a simple visualization on how this all fits together:
 
 ![SIGPROF handler](/sigprof_handler.png)
 
-What happens to profMap? TODO:XXX
+As can be seen, the final structure resembles the regular `pprof.Profile` object a lot: it is a a hashmap where the key is stack trace + label and the value is the number of times where this callstack is observed in the application.
 
-So, there are couple of questions that I asked myself once I understand the overall design:
+When `pprof.StopCPUProfile()` is called, profiling stops and the `profileWriter` goroutine calls `build()` function which is implemented [here](https://github.com/golang/go/blob/aa4299735b78189eeac1e2c4edafb9d014cc62d7/src/runtime/pprof/proto.go#L348). This function is responsible for writing the `profMap` structure to the `io.Writer` object that is provided in the initial
+`pprof.StartCPUProfile` call. Basically this is where the final [`pprof.Profile`](https://pkg.go.dev/runtime/pprof#Profile) object is generated. A pseudocode for `pprof.StopCPUProfile()` might be helpful here:
 
-1. Why the Go runtime took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap
-periodically?
+![pseudo_code](/pseudo_code.png)
+
+Once I have a high-level understanding of this the overall design, the first question I asked to myself was following: 
+
+*Why the Go runtime took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap
+periodically?*
+
+xxx
+One of the first things that the signal handler does is to disable memory allocation. The profiler code path does not involve any allocation or locks, this helps keeping profiler overhead low and predictable and with probably additional benefits. Even the maximum depth of stack trace is predefined: as of Go `1.19` it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22).
 
 # Conclusion
 
