@@ -80,7 +80,7 @@ What happens to profMap? TODO:XXX
 
 So, there are couple of questions that I asked myself once I understand the overall design:
 
-1. Why the Go runtime took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data. Why not write everything to a hashmap
+1. Why the Go runtime took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap
 periodically?
 
 # Conclusion
