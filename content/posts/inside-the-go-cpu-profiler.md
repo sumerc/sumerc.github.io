@@ -22,8 +22,8 @@ when I read Go runtime and this was no exception.
 # Basics
 
 There are two types of profilers:
- 1. **tracing**: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
- 2. **sampling**: do measurements at regular intervals.
+1. **tracing**: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
+2. **sampling**: do measurements at regular intervals.
 
  Go CPU profiler is a sampling profiler. There is also a [Go execution tracer](https://pkg.go.dev/runtime/trace) which is 
  tracing profiler and traces certain events like acquiring a Lock, GC related events...etc
