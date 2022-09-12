@@ -25,10 +25,10 @@ There are two types of profilers:
 1. **tracing**: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
 2. **sampling**: do measurements at regular intervals.
 
- Go CPU profiler is a sampling profiler. There is also a [Go execution tracer](https://pkg.go.dev/runtime/trace) which is 
- tracing profiler and traces certain events like acquiring a Lock, GC related events...etc
+Go CPU profiler is a sampling profiler. There is also a [Go execution tracer](https://pkg.go.dev/runtime/trace) which is 
+tracing profiler and traces certain events like acquiring a Lock, GC related events...etc. From a design point of view, sampling profilers usually consists of two 
+basic parts:
 
-Every sampling profiler consists two basic parts:
 1. **sampler**: triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
 profilers use different strategies to trigger the sampling interval.
 2. **data collection**: this is where profiler collects its data: it might be memory consumption, call count. Basically any metric that can be associated with a stack trace.
@@ -39,7 +39,7 @@ Linux `perf` uses `PMU`(Performance Monitor Unit) counters for sampling. In summ
 
 [`pyspy`](https://github.com/benfred/py-spy) and [`rbspy`](https://github.com/rbspy/rbspy) are famous sampling profilers for Python and Ruby. They both ran as external processes and they periodically read the target application memory to capture the stack trace of running threads. In Linux, they use `process_vm_readv` and if I am not mistaken this API pauses the target application for few miliseconds during memory read. Then they chase pointers inside the memory they read to find the current running thread structure and stack trace information. As you might guess, this is a error prone and complex approach but works surprisingly well. IIRC, [`pyflame`](https://github.com/uber-archive/pyflame) uses similar approach too.
 
-Recent profilers like [Parca](parca.dev)(there are few others) use [eBPF](https://ebpf.io/). eBPF is a recent technology that allows to run userland code in the Kernel VM. It is a brilliant technology that is used in lots of areas like security, networking and observability for sure. I highly suggest to read some information on eBPF, it is definitely a massive topic that goes well beyond the scope of this blog post.
+Recent profilers like [Parca](parca.dev)(there are few others) use [eBPF](https://ebpf.io/). eBPF is a recent technology that allows to run userland code in the Kernel VM. It is a brilliant technology that is used in lots of areas like security, networking and observability for sure. I highly suggest to read some information on eBPF, it is a massive topic that goes well beyond the scope of this blog post.
 
 I think you get the idea: although there are various strategies to implement a sampling profiler under the hood, the underlying ideas/patterns stays same:
 setup a periodic handler and read/aggregate stack trace data.
