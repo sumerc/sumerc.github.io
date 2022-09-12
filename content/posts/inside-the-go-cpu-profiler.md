@@ -22,16 +22,16 @@ when I read Go runtime and this was no exception.
 # Basics
 
 There are two types of profilers:
-1. `tracing`: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
-2. `sampling`: do measurements at regular intervals.
+1. **tracing**: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
+2. **sampling**: do measurements at regular intervals.
 
 Go CPU profiler is a sampling profiler. There is also a [Go execution tracer](https://pkg.go.dev/runtime/trace) which is 
 tracing profiler and traces certain events like acquiring a Lock, GC related events...etc. From a design point of view, sampling profilers usually consists of two 
 basic parts:
 
-1. `sampler`: triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
+1. **sampler**: triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
 profilers use different strategies to trigger the sampling interval.
-2. `data collection`: this is where profiler collects its data: it might be memory consumption, call count. Basically any metric that can be associated with a stack trace.
+2. **data collection**: this is where profiler collects its data: it might be memory consumption, call count. Basically any metric that can be associated with a stack trace.
 
 # How other profilers work?
 
