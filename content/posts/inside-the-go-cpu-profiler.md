@@ -22,16 +22,16 @@ when I read Go runtime and this was no exception.
 # Basics
 
 There are two types of profilers:
-1. **tracing**: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
-2. **sampling**: do measurements at regular intervals.
+1. `tracing`: do measurements whenever an pre-defined event happens. e.g., function called, function exited...etc.
+2. `sampling`: do measurements at regular intervals.
 
 Go CPU profiler is a sampling profiler. There is also a [Go execution tracer](https://pkg.go.dev/runtime/trace) which is 
 tracing profiler and traces certain events like acquiring a Lock, GC related events...etc. From a design point of view, sampling profilers usually consists of two 
 basic parts:
 
-1. **sampler**: triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
+1. `sampler`: triggers a callback at regular intervals and this callback collects profiling data(usually a stack trace).Different
 profilers use different strategies to trigger the sampling interval.
-2. **data collection**: this is where profiler collects its data: it might be memory consumption, call count. Basically any metric that can be associated with a stack trace.
+2. `data collection`: this is where profiler collects its data: it might be memory consumption, call count. Basically any metric that can be associated with a stack trace.
 
 # How other profilers work?
 
@@ -46,7 +46,7 @@ setup a periodic handler and read/aggregate stack trace data.
 
 # How the profiler is triggered periodically?
 
-Let's reiterate again: Go CPU profiler is a sampling profiler. In Linux, Go runtime uses `setitimer`/`timer_create/timer_settime` APIs to set up a `SIGPROF` signal handler. This handler is triggered at periodic intervals that is controlled by `runtime.SetCPUProfileRate` which is `100Mz(10ms)` by default. As a side note: surprisingly, there were some serious issues around the sampler of the Go CPU profiler until Go 1.18! You can see the gory details on the problems around it [here](https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/). As a brief summary, What I understand from the article is: `setitimer` API was the recommended way of triggering time based signals per-thread in Linux but it was not working as advertised. Please feel free to correct me if this claim is wrong. 
+Let's reiterate again: Go CPU profiler is a sampling profiler. In Linux, Go runtime uses `setitimer`/`timer_create/timer_settime` APIs to set up a `SIGPROF` signal handler. This handler is triggered at periodic intervals that is controlled by `runtime.SetCPUProfileRate` which is `100Mz(10ms)` by default. As a side note: surprisingly, there were some serious issues around the sampler of the Go CPU profiler until Go 1.18! You can see the gory details on the problems around it [here](https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/). IIUC, `setitimer` API was the recommended way of triggering time based signals per-thread in Linux but it was not working as advertised. Please feel free to correct me if this claim is wrong.
 
 Let's see how you can enable the Go CPU profiler manually:
 
@@ -61,15 +61,15 @@ if err := pprof.StartCPUProfile(f); err != nil {
 defer pprof.StopCPUProfile()
 ```
 
-Like mentioned, once `pprof.StartCPUProfile` is called, Go runtime enables the `SIGPROF` signal to be generated at specific intervals.
+Once `pprof.StartCPUProfile` is called, Go runtime enables the `SIGPROF` signal to be generated at specific intervals. Kernel sends a `SIGPROF` signal to one of the **running** threads in the application. Since Go ises non-blocking I/O, goroutines that are waiting on I/O are not counted as **running** and these are not catched by the Go CPU Profiler. In fact, this was the basic reason of why [fgprof](https://github.com/felixge/fgprof) was implemented.
 
-A simple visualization on how the Go CPU profiler sampler works:
+A picture is worth thousand words:
 
 ![SIGPROF signal in the Go runtime](/sigprof.png)
 
 # How profiler collects data?
 
-Kernel sends a `SIGPROF` signal to one of the running threads in the application. This interrupts the running thread(goroutine) and the `SIGPROF` signal handler is invoked. The stack trace of the interrupted goroutine is retrieved in the context of this signal handler. This stack trace is then saved into a lock-free log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf` and it is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. To summarize it up: it is a lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure that is safe to be used by a **single writer** and a **single reader** which highly resembles http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf. The writer is the profiler signal handler and the reader is a goroutine(`profileWriter`) that periodically reads this buffer and aggregates results to a final hashmap structure in a separate goroutine. This hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
+ Once, a random running goroutine receives a `SIGPROF` signal, it gets interrupted and signal handler runs. The stack trace of the interrupted goroutine is retrieved in the context of this signal handler and then saved into a [lock-free](https://preshing.com/20120612/an-introduction-to-lock-free-programming/) log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf` and it is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. To summarize it up: it is a **single-writer**, **single-reader** lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure which highly resembles the one published [here](http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf). The writer is the profiler signal handler and the reader is a goroutine(`profileWriter`) that periodically reads this buffer and aggregates results to a final hashmap structure in a separate goroutine. This hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
 
 Here is a simple visualization on how this all fits together:
 
