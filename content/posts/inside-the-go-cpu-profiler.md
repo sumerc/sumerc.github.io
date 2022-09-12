@@ -88,7 +88,7 @@ Once I have a high-level understanding of this the overall design, the first que
 periodically?*
 
 xxx
-One of the first things that the signal handler does is to disable memory allocation. The profiler code path does not involve any allocation or locks, this helps keeping profiler overhead low and predictable and with probably additional benefits. Even the maximum depth of stack trace is predefined: as of Go `1.19` it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22).
+One of the first things that the signal handler does is to disable memory allocation. The profiler code path does not involve any allocation or locks, this helps keeping profiler overhead low and predictable and with probably additional benefits. Even the maximum depth of stack trace is predefined. As of `Go 1.19`, it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22).
 
 # Conclusion
 
