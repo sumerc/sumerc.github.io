@@ -110,7 +110,7 @@ And as a final note, based on above theory, following important claim can be mad
 
 > The profiler overhead will be minimum on typical I/O bound applications.
 
-This is because trashing of CPU caches does not make any difference when there are lots of sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally **zero** (or statistically insignificant) overhead on typical I/O bound applications. Again, providing an empirical evidence is beyond the scope of this blog post but it could easily be done with observing the throughput during a load testing of a Go web application while the profiler is on and off.
+This is because trashing of CPU caches does not make much difference when there are lots of sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally **zero** (or statistically insignificant) overhead on typical I/O bound applications. Again, providing an empirical evidence is beyond the scope of this blog post but it could easily be done with observing the throughput during a load testing of a Go web application while the profiler is on and off.
 
 # Conclusion
 
