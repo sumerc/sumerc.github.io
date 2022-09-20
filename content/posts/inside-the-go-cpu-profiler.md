@@ -7,15 +7,12 @@ draft: true
 
 # Introduction
 
-Go is one of its kind when it comes to profiling: Go runtime includes powerful and opinionated(!) profilers inside the runtime. In other languages like
-Ruby, Python, or Node.js, the standard library contains profilers or at least a few APIs for writing 
-profilers, but those are limited in scope compared to what Go offers out of the box. If you want to
-learn more about the types of profilers, and tracing tools that Go provides, I highly recommend Felix Geisendörfer's
+Go is one of its kind when it comes to profiling. It includes powerful and opinionated(!) profilers inside the runtime. In other languages like
+Ruby, Python, or Node.js, the standard library contains profilers or few APIs for writing profilers. But they are limited in scope compared to what Go offers out of the box. If you want to learn more about the types of observability tools that Go provides, I highly recommend Felix Geisendörfer's
 [The Busy Developer's Guide to Go Profiling, Tracing and Observability](https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md)
 
-As a curious engineer, I love to dig deep on how things work at a low level and I have always wanted to teach 
-myself how Go CPU profiler works under the hood. This blog post is the result of that journey. There is no such time, I did not find myself learning new things
-when I read Go runtime and this was no exception. 
+As a curious engineer, I love to dig deep on how things work at a lower level and I always wanted to teach 
+myself how Go CPU profiler works under the hood. This blog post is the result of that journey. I always find myself learning new things when I read Go runtime and this was no exception. 
 
 # Basics
 
