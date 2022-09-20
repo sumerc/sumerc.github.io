@@ -84,12 +84,40 @@ When `pprof.StopCPUProfile()` is called, profiling stops and the `profileWriter`
 
 Once I have a high-level understanding of this the overall design, the first question I asked to myself was following: 
 
-*Why the Go runtime took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap
-periodically?*
+*Why the Go runtime took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?*
 
-xxx
-One of the first things that the signal handler does is to disable memory allocation. The profiler code path does not involve any allocation or locks, this helps keeping profiler overhead low and predictable and with probably additional benefits. Even the maximum depth of stack trace is predefined. As of `Go 1.19`, it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22).
+I think the answer is in the design itself:
+
+Look at the first thing that the `SIGPROF` handler does is to disable memory allocation. Addition to that, the profiler code path does not involve any locks and even the maximum depth of stack trace is hardcoded. As of `Go 1.19`, it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22). All these details leads to a more efficient and predictable profiler. Predictable is key here. It is important to have a constant overhead for a production-ready profiler. 
+
+# Overhead
+
+Based on the design, the profiler overhead should be deterministic. And this is *true*. Well, kind of... Let me explain. In a single profiler interrupt, following happens:
+
+1. a random running goroutine context switch to run the `SIGPROF` handler code,
+2. stack walk happens and saved to a lock-free ring buffer,
+3. the goroutine is resumed.
+
+While I could not find the reference, I remember all above happens in around ~10 nanoseconds. In theory, if you interrupt a Go application 100 times a second, the profiler overhead should be close to ~1000 nanosecs. Add the cycles spent for `ProfilerWriter` goroutine and you will have a predictable, constant number. But, that is not the case. If you search for the overhead of Go CPU profiler, you will see numbers ranging from %1-%5 and even in some rare cases %10. The reason behind this related with how CPUs work. Modern CPUs are complex beasts. They cache aggressively. A typical single CPU core has 3 layers of caches: L1, L2 and L3. When a specific CPU intensive code is running, these caches are highly utilized. This is especially true for some applications where a small, sequential(data that can fit in cache) amount of data is read heavily. A good example to this is matrix multiplication. During matrix multiplication, CPU heavily access individual cells which are sequential in memory. These kind of applications might produce *worst* behaviour for a sampling profiler. While it is tempting to do some benchmarks with `perf` to see CPU behavior for different type of applications, I think it is beyond the scope of this blog post.
+
+In summary, there is a bit of uncertainty on the overhead of the profiler. But Go runtime has done a good job to keep it as predictable and as low as possible. If you don't believe me, which you should not, maybe below can convince you:
+
+> At Google, we continuously profile Go production services and it is safe to do so.
+
+Above is a quote from a [Google thread](https://groups.google.com/g/golang-nuts/c/e6lB8ENbIw8/m/azeTCGj7AgAJ).
+
+And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuos profiler implementation which makes the profiler to **always be enabled**:
+
+> After testing this default on many high-volume internal workloads, we've
+determined this default is safe for production. 
 
 # Conclusion
 
-One of the things I love about this design is that it proves how well you can optimize code depends on how well you understand the access patterns of your underlying data structures. In this case, a lock-free structure is used even though it might be a complete overkill for most of the time.
+One of the things I love about this design is that it proves how well you can optimize code depends on how well you understand the access patterns of your underlying data structures. In this case, a lock-free structure is used even although it is mostly a complete overkill. As mentioned in the beginning of this blog post, Go runtime is full of
+clever optimizations like these and provides an excellent example of how and when to do optimizations.
+
+Hope you enjoyed!
+
+# References
+
+xxx
