@@ -94,20 +94,20 @@ In theory, it seems like all above should run in constant time as no allocation 
 
 Even under mentioned constraints, Go runtime has done a great job to keep the profiler overhead as predictable and as low as possible. If you don't believe me, which you should not, maybe below can convince you:
 
-> At Google, we continuously profile Go production services and it is safe to do so.
+> *At Google, we continuously profile Go production services and it is safe to do so.*
 
 Above is a quote from a [Google thread](https://groups.google.com/g/golang-nuts/c/e6lB8ENbIw8/m/azeTCGj7AgAJ).
 
 And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuos profiler implementation which makes the profiler to **always be enabled**:
 
-> After testing this default on many high-volume internal workloads, we've
-determined this default is safe for production.
+> *After testing this default on many high-volume internal workloads, we've
+determined this default is safe for production.*
 
 And as a final note, based on above theory, following important claim can be made:
 
-> The profiler overhead will be minimum on typical I/O bound applications.
+**The profiler overhead will be minimum on typical I/O bound applications.**
 
-This is because trashing of CPU caches does not make much difference when there are lots of sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally **zero** (or statistically insignificant) overhead on typical I/O bound applications. Again, providing an empirical evidence is beyond the scope of this blog post but it could easily be done with observing the throughput during a load testing of a Go web application while the profiler is on and off.
+This is because trashing of CPU caches does not make much difference when there are lots of sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally **zero** (or statistically insignificant) overhead on typical I/O bound applications. Again, providing an empirical evidence is beyond the scope of this blog post but it could be done with observing the throughput during a load testing of a Go web application while the profiler is on and off.
 
 # Conclusion
 
