@@ -87,7 +87,7 @@ Look at the first thing that the `SIGPROF` handler does is to disable memory all
 Based on the design, should the profiler overhead should be constant? This is a fair question. Well, kind of... Let me explain. In a single profiler interrupt, following happens:
 
 1. a random running goroutine context switch to run the `SIGPROF` handler code,
-2. stack walk happens and saved to a lock-free ring buffer,
+2. stack walk happens and the stack trace is saved to a lock-free ring buffer,
 3. the goroutine is resumed.
 
 In theory, it seems like all above should run in constant time as no allocation and locks are happening and this is kind of true: while I could not find the reference, I remember all above happens in around ~10 nanoseconds(on a typical CPU). But, in practice that is not the case. If you search for the overhead of Go CPU profiler, you will see numbers ranging from `%1-%5` and even in some rare cases `%10`. The reason behind this is related with how CPUs work. Modern CPUs are complex beasts. They cache aggressively. A typical single CPU core has 3 layers of cache: L1, L2 and L3. When a specific CPU intensive code is running, these caches are highly utilized. This is especially true for some applications where a small, sequential(data that can fit in cache) amount of data is read heavily. A good example to this is matrix multiplication. During matrix multiplication, CPU heavily accesses individual cells which are sequential in memory. These kind of high cache-friendly applications might produce *worst* behaviour for a sampling profiler. While it is tempting to do some benchmarks with `perf` to verify this claim, I think it is beyond the scope of this blog post.
