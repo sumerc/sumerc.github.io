@@ -111,8 +111,7 @@ This is because trashing of CPU caches does not make much difference when there 
 
 # Conclusion
 
-One of the things I love about this design is that it proves how well you can optimize code depends on how well you understand the access patterns of your underlying data structures. In this case, a lock-free structure is used even although it is mostly a complete overkill. As mentioned in the beginning of this blog post, Go runtime is full of
-clever optimizations like these and provides an excellent example of how and when to do optimizations.
+One of the things I love about this design is that it proves how well you can optimize code depends on how well you understand the access patterns of your underlying data structures. In this case, a lock-free structure is used even though it would be a complete overkill for most of the time. As mentioned in the beginning of this blog post, Go runtime is full of clever optimizations like these.
 
 Hope you enjoyed!
 
