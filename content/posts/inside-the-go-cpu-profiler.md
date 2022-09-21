@@ -73,9 +73,9 @@ As can be seen, the final structure resembles the regular `pprof.Profile` object
 
 Once I have a high-level understanding of this the overall design, the first question I asked to myself was following: 
 
-*Why the Go runtime took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?*
+**Why Go took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?**
 
-I think the answer is in the design itself:
+I think the answer is in the design itself.
 
 Look at the first thing that the `SIGPROF` handler does is to disable memory allocation. Additionally, the profiler code path does not involve any locks and even the maximum depth of stack trace is hardcoded. As of `Go 1.19`, it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22). All these details are there to provide a more efficient and predictable overhead for the profiler. Low and predictable performance is key for a production-ready profiler. 
 
@@ -93,20 +93,20 @@ An excellent example of this is matrix multiplication: during matrix multiplicat
 
 Having said the above, Go runtime has done a great job of keeping the profiler overhead as predictable and as low as possible. If you don't believe me, which you should not, maybe below can convince you:
 
-> *At Google, we continuously profile Go production services, and it is safe to do so.*
+> At Google, we continuously profile Go production services, and it is safe to do so.
 
 Above is a quote from a [Google thread](https://groups.google.com/g/golang-nuts/c/e6lB8ENbIw8/m/azeTCGj7AgAJ).
 
 And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuous profiler implementation which makes the profiler to **always be enabled**:
 
-> *After testing this default on many high-volume internal workloads, we've
-determined this default is safe for production.*
+> After testing this default on many high-volume internal workloads, we've
+determined this default is safe for production.
 
 And as a final note, based on the above theory, we can make following observation:
 
 **The profiler overhead will be minimum on typical I/O bound applications.**
 
-This is because trashing CPU caches does not make much difference when there are many sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally **zero** (or statistically insignificant) overhead on typical I/O bound applications. But, again, providing empirical evidence is beyond the scope of this blog post one can do it by observing the throughput during a load testing of a Go web application while the profiler is on and off.
+This is because CPU cache trashing does not make much difference when there are many sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally **zero** (or statistically insignificant) overhead on typical I/O bound applications. But, again, providing empirical evidence is beyond the scope of this blog post one can do it by observing the throughput during a load testing of a Go web application while the profiler is on and off.
 
 # Conclusion
 
@@ -116,4 +116,7 @@ I hope you enjoyed it!
 
 # References
 
-xxx
+1. https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md
+2. https://easyperf.net/blog/2018/06/01/PMU-counters-and-profiling-basics
+3. https://www.instana.com/blog/go-profiler-internals/
+4. https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/
