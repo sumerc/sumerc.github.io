@@ -120,3 +120,4 @@ I hope you enjoyed it!
 2. https://easyperf.net/blog/2018/06/01/PMU-counters-and-profiling-basics
 3. https://www.instana.com/blog/go-profiler-internals/
 4. https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/
+5. http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf
