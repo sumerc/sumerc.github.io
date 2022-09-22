@@ -75,7 +75,7 @@ Once I have a high-level understanding of this the overall design, the first que
 
 **Why Go took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?**
 
-I think the answer is in the design itself.
+The answer is in the design itself.
 
 Look at the first thing that the `SIGPROF` handler does is to disable memory allocation. Additionally, the profiler code path does not involve any locks and even the maximum depth of stack trace is hardcoded. As of `Go 1.19`, it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22). All these details are there to provide a more efficient and predictable overhead for the profiler. Low and predictable performance is key for a production-ready profiler. 
 
