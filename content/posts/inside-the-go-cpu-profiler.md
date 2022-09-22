@@ -67,9 +67,31 @@ Here is a simple visualization on how this all fits together:
 
 ![SIGPROF handler](/sigprof_handler.png)
 
-As can be seen, the final structure resembles the regular `pprof.Profile` object a lot: it is a a hashmap where the key is stack trace + label and the value is the number of times where this callstack is observed in the application. When `pprof.StopCPUProfile()` is called, profiling stops and the `profileWriter` goroutine calls `build()` function which is implemented [here](https://github.com/golang/go/blob/aa4299735b78189eeac1e2c4edafb9d014cc62d7/src/runtime/pprof/proto.go#L348). This function is responsible for writing this `profMap` structure to the `io.Writer` object that is provided in the initial `pprof.StartCPUProfile` call. Basically this is where the final [`pprof.Profile`](https://pkg.go.dev/runtime/pprof#Profile) object is generated. A pseudocode for `pprof.StopCPUProfile()` might be helpful here:
+As can be seen, the final structure resembles the regular `pprof.Profile` object a lot: it is a a hashmap where the key is stack trace + label and the value is the number of times where this callstack is observed in the application. When `pprof.StopCPUProfile()` is called, profiling stops and the `profileWriter` goroutine calls `build()` function which is implemented [here](https://github.com/golang/go/blob/aa4299735b78189eeac1e2c4edafb9d014cc62d7/src/runtime/pprof/proto.go#L348). This function is responsible for writing this `profMap` structure to the `io.Writer` object that is provided in the initial `pprof.StartCPUProfile` call. Basically this is where the final [`pprof.Profile`](https://pkg.go.dev/runtime/pprof#Profile) object is generated. 
 
-![pseudo_code](/pseudo_code.png)
+Pseudocode for `profileWriter` might be helpful here:
+
+```go
+func profileWriter(w io.Writer) {
+	...
+
+	for {
+		time.Sleep(100 * time.Millisecond)
+		
+        data, tags, eof := readProfile()
+		if e := b.addCPUData(data, tags); e != nil {
+			...
+		}
+		
+        if profilerStopped {
+			break
+		}
+	}
+    ...
+    b.build() // -> generates the final pprof.Profile
+    ...
+}
+```
 
 Once I have a high-level understanding of this the overall design, the first question I asked to myself was following: 
 
