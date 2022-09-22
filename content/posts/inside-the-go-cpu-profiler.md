@@ -5,8 +5,6 @@ draft: true
 ---
 
 
-# Introduction
-
 Go is one of its kind when it comes to profiling. It includes powerful and opinionated(!) profilers inside the runtime. Other languages like
 Ruby, Python, or Node.js, contains profilers or a few APIs for writing profilers. But they are limited in scope compared to what Go offers out of the box. If you want to learn more about the types of observability tools that Go provides, I highly recommend Felix Geisendörfer's
 [The Busy Developer's Guide to Go Profiling, Tracing and Observability](https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md)
@@ -73,22 +71,21 @@ Pseudocode for `profileWriter` might be helpful here:
 
 ```go
 func profileWriter(w io.Writer) {
-	...
-
-	for {
-		time.Sleep(100 * time.Millisecond)
-		
-        data, tags, eof := readProfile()
-		if e := b.addCPUData(data, tags); e != nil {
-			...
-		}
-		
-        if profilerStopped {
-			break
-		}
-	}
     ...
-    b.build() // -> generates the final pprof.Profile
+    for {
+        time.Sleep(100 * time.Millisecond)
+
+        data, tags := readProfile()
+        if e := b.addCPUData(data, tags); e != nil {
+            ...
+        }
+
+        if profilerStopped {
+            break
+        }
+    }
+    ...
+    b.build() // -> generates final pprof.Profile
     ...
 }
 ```
