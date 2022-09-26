@@ -1,6 +1,6 @@
 ---
 title: "Inside the Go CPU profiler"
-date: 2022-08-26T20:03:25+03:00
+date: 2022-09-26T18:42:25+03:00
 draft: false
 ---
 
