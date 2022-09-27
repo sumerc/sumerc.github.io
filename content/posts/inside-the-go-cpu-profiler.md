@@ -36,14 +36,14 @@ Recent profilers like [Parca](parca.dev)(there are few others) use [eBPF](https:
 
 # How the profiler is triggered periodically?
 
-Go CPU profiler is a sampling profiler. In Linux, Go runtime uses `setitimer`/`timer_create/timer_settime` APIs to set up a `SIGPROF` signal handler. This handler is triggered at periodic intervals controlled by `runtime.SetCPUProfileRate`, which is `100Mz(10ms)` by default. As a side note: surprisingly, there were some serious issues around the sampler of the Go CPU profiler until Go 1.18! You can see the gory details on these problems [here](https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/). IIUC, `setitimer` API was the recommended way of triggering time-based signals per-thread in Linux, but it was not working as advertised. Please feel free to correct me if this claim is wrong.
+Go CPU profiler is a sampling profiler. In Linux, Go runtime uses `setitimer`/`timer_create/timer_settime` APIs to set up a `SIGPROF` signal handler. This handler is triggered at periodic intervals controlled by `runtime.SetCPUProfileRate`, which is `100Mz(10ms)` by default. As a side note: surprisingly, there were some serious issues around the sampler of the Go CPU profiler until Go 1.18! You can see the gory details on these problems [here](https://www.datadoghq.com/blog/engineering/profiling-improvements-in-go-1-18/). IIUC, `setitimer` API was the recommended way of triggering time-based signals per-thread in Linux, ~~but it was not working as advertised. Please feel free to correct me if this claim is wrong.~~ *(Felix corrected this [claim](https://twitter.com/felixge/status/1574712785631682560))*: Technically it works as you'd expect from a process-directed signal mechanism. But it's not a good mechanism for multicore profiling.
 
 Let's see how you can enable the Go CPU profiler manually:
 
 ```go
 f, err := os.Create("profile.pb.gz")
 if err != nil {
-    log.Fatal(...)
+    ...
 }
 if err := pprof.StartCPUProfile(f); err != nil {
     ...
@@ -106,7 +106,7 @@ Based on the design, should the profiler overhead be constant? Well, it depends.
 2. stack walk happens, and Go runtime saves the stack trace to a lock-free ring buffer,
 3. the goroutine is resumed.
 
-In theory, it seems like all above should run in constant time as no allocation and locks are happening, which is true. While I could not find the reference, I remember all the above happens in around ~10 nanoseconds(on a typical CPU). But, in practice, that is not the case. If you search for the "overhead of the Go CPU profiler", you will see numbers ranging from [`%0.5`](https://cloud.google.com/blog/products/management-tools/in-tests-cloud-profiler-adds-negligible-overhead) to [`%1-%5`](https://medium.com/google-cloud/continuous-profiling-of-go-programs-96d4416af77b) and even `%10` in some rare cases. The reason behind this is related to how CPUs work. Modern CPUs are complex beasts. They cache aggressively. A typical single CPU core has three layers of cache: L1, L2, and L3. When a specific CPU-intensive code is running, these caches are highly utilized. High cache utilization is especially true for some applications where small(data that can fit in cache) and sequential data is read heavily. 
+In theory, it seems like all above should run in constant time as no allocation and locks are happening, which is true. ~~While I could not find the reference, I remember all the~~ All above happens in around ~~~10 nanoseconds~~ ~1 microseconds (on a typical CPU)*([Thanks](https://twitter.com/felixge/status/1574713520003817473) to Felix)*. But, in practice, that is not the case. If you search for the "overhead of the Go CPU profiler", you will see numbers ranging from [`%0.5`](https://cloud.google.com/blog/products/management-tools/in-tests-cloud-profiler-adds-negligible-overhead) to [`%1-%5`](https://medium.com/google-cloud/continuous-profiling-of-go-programs-96d4416af77b) ~~and even `%10`~~*(no public mention was found on this number and no emprirical evidence, too)* in some rare cases. The reason behind this is related to how CPUs work. Modern CPUs are complex beasts. They cache aggressively. A typical single CPU core has three layers of cache: L1, L2, and L3. When a specific CPU-intensive code is running, these caches are highly utilized. High cache utilization is especially true for some applications where small(data that can fit in cache) and sequential data is read heavily. 
 
 An excellent example of this is matrix multiplication: during matrix multiplication, CPU heavily accesses individual cells which are sequential in memory. These kinds of cache-friendly applications might produce *worst* overhead for a sampling profiler. While it is tempting to do some benchmarks with `perf` to verify this claim, it is beyond the scope of this blog post.
 
