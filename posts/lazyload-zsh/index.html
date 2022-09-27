@@ -4,22 +4,11 @@ I was coding as usual when I started something odd with my shell. I have done fe
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-154918616-1")</script></div><header class=post-header></br><div class="row post-desc"><div class=col-xs-6><time class=posts-date datetime=" 2021-12-31 11:29:57 +0300"><b>31 JAN 2021</b></time></div></div><h1 class=post-title>Improve zsh startup time via lazyload</h1><hr></hr></header><div class="post-content markdown-body" data-progress-indicator><h1 id=my-shell-is-slooow>My shell is slooow!</h1><p>This is my first blog post for years. I have been finding excuses for not writing one over
 the years, but I feel this is the right time.</p><p>I was coding as usual when I started something odd with my shell. I have done few adjustments
 to my <code>.zshrc</code> file and out of a sudden it became very slow to spawn a new shell. As a person
-who has a obsession with performance, it became my duty to find out the problem.</p><h1 id=the-culprit>The culprit</h1><p>I have done some measurements:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>&gt; <span class=nb>time</span> /bin/zsh -i -c <span class=nb>exit</span>
-</span></span><span class=line><span class=cl>/bin/zsh -i -c <span class=nb>exit</span>  0.30s user 0.41s system 34% cpu 2.077 total</span></span></code></pre></td></tr></table></div></div><p>2 secs just for spawning a new shell? There is really something odd. Well at this point,
+who has a obsession with performance, it became my duty to find out the problem.</p><h1 id=the-culprit>The culprit</h1><p>I have done some measurements:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>&gt; <span class=nb>time</span> /bin/zsh -i -c <span class=nb>exit</span>
+</span></span><span class=line><span class=cl>/bin/zsh -i -c <span class=nb>exit</span>  0.30s user 0.41s system 34% cpu 2.077 total</span></span></code></pre></div><p>2 secs just for spawning a new shell? There is really something odd. Well at this point,
 I thought using some kind of profiler on my Mac like samples, but then I decided it will be simpler
 to go over the things on <code>.zshrc</code> file comment out some of them to find out what is causing this annoying
-lag.</p><p>After a while, I found 3 things:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span><span class=lnt>9
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span> -s <span class=s2>&#34;</span><span class=nv>$NVM_ROOT</span><span class=s2>/nvm.sh&#34;</span> <span class=o>]</span> <span class=o>&amp;&amp;</span> <span class=se>\.</span> <span class=s2>&#34;</span><span class=nv>$NVM_ROOT</span><span class=s2>/nvm.sh&#34;</span>
+lag.</p><p>After a while, I found 3 things:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span> -s <span class=s2>&#34;</span><span class=nv>$NVM_ROOT</span><span class=s2>/nvm.sh&#34;</span> <span class=o>]</span> <span class=o>&amp;&amp;</span> <span class=se>\.</span> <span class=s2>&#34;</span><span class=nv>$NVM_ROOT</span><span class=s2>/nvm.sh&#34;</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> -s <span class=s2>&#34;</span><span class=nv>$NVM_ROOT</span><span class=s2>/bash_completion&#34;</span> <span class=o>]</span> <span class=o>&amp;&amp;</span> 
 </span></span><span class=line><span class=cl>    <span class=se>\.</span> <span class=s2>&#34;</span><span class=nv>$NVM_ROOT</span><span class=s2>/bash_completion&#34;</span>
 </span></span><span class=line><span class=cl>
@@ -27,20 +16,10 @@ lag.</p><p>After a while, I found 3 things:</p><div class=highlight><div class=c
 </span></span><span class=line><span class=cl><span class=nb>source</span> <span class=nv>$RVM_ROOT</span>/scripts/rvm
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>PATH</span><span class=o>=</span><span class=nv>$PYENV_ROOT</span>/bin:<span class=nv>$PATH</span>
-</span></span><span class=line><span class=cl><span class=nb>eval</span> <span class=s2>&#34;</span><span class=k>$(</span>pyenv init --path<span class=k>)</span><span class=s2>&#34;</span></span></span></code></pre></td></tr></table></div></div><p>As you can see, I am frequently using <code>nvm</code>, <code>rvm</code> and <code>pyenv</code>. That is because my day-to-day job requires jumping between
+</span></span><span class=line><span class=cl><span class=nb>eval</span> <span class=s2>&#34;</span><span class=k>$(</span>pyenv init --path<span class=k>)</span><span class=s2>&#34;</span></span></span></code></pre></div><p>As you can see, I am frequently using <code>nvm</code>, <code>rvm</code> and <code>pyenv</code>. That is because my day-to-day job requires jumping between
 different versions of Node/Python/Ruby currently.</p><p>When I comment out above code, the startup time decreases to <code>0.153</code> from <code>2.077</code> :)</p><h1 id=lazyload-extension-to-the-rescue>lazyload extension to the rescue</h1><p>Most of the time, I don&rsquo;t need these stuff to be initialized at all. However, I need them
 when I need them.</p><p>There is a extension called <code>lazyload</code> that takes a command and do the initialization only once
-when you need them. Within few minutes, I arrived at following code:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>lazyload nvm -- <span class=s1>&#39;[ -s &#34;$NVM_ROOT/nvm.sh&#34; ] &amp;&amp; 
+when you need them. Within few minutes, I arrived at following code:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>lazyload nvm -- <span class=s1>&#39;[ -s &#34;$NVM_ROOT/nvm.sh&#34; ] &amp;&amp; 
 </span></span></span><span class=line><span class=cl><span class=s1>    \. &#34;$NVM_ROOT/nvm.sh&#34; 
 </span></span></span><span class=line><span class=cl><span class=s1>        [ -s &#34;$NVM_ROOT/bash_completion&#34; ] &amp;&amp; 
 </span></span></span><span class=line><span class=cl><span class=s1>    \. &#34;$NVM_ROOT/bash_completion&#34;&#39;</span>
@@ -49,5 +28,5 @@ when you need them. Within few minutes, I arrived at following code:</p><div cla
 </span></span></span><span class=line><span class=cl><span class=s1>    source $RVM_ROOT/scripts/rvm&#39;</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>lazyload pyenv -- <span class=s1>&#39;export PATH=$PYENV_ROOT/bin:$PATH
-</span></span></span><span class=line><span class=cl><span class=s1>    eval &#34;$(pyenv init --path)&#34;&#39;</span></span></span></code></pre></td></tr></table></div></div><p>Which was exactly what I needed!</p><p>My full <code>.zshrc</code> file: <a href=https://github.com/sumerc/dotfiles/blob/main/zshrc>https://github.com/sumerc/dotfiles/blob/main/zshrc</a></p><p>And the <code>zsh-lazyload</code> extension: <a href=https://github.com/qoomon/zsh-lazyload>https://github.com/qoomon/zsh-lazyload</a></p><h1 id=one-final-thought>One final thought</h1><p>Right now, I am really wondering why these tools do not provide this kind of lazy-loading by default.
+</span></span></span><span class=line><span class=cl><span class=s1>    eval &#34;$(pyenv init --path)&#34;&#39;</span></span></span></code></pre></div><p>Which was exactly what I needed!</p><p>My full <code>.zshrc</code> file: <a href=https://github.com/sumerc/dotfiles/blob/main/zshrc>https://github.com/sumerc/dotfiles/blob/main/zshrc</a></p><p>And the <code>zsh-lazyload</code> extension: <a href=https://github.com/qoomon/zsh-lazyload>https://github.com/qoomon/zsh-lazyload</a></p><h1 id=one-final-thought>One final thought</h1><p>Right now, I am really wondering why these tools do not provide this kind of lazy-loading by default.
 It seems far better practice especially for people that have to install lots of different tools.</p></div><div class="row middle-xs"><div class=col-xs-12></div></div><div class=row><div class=col-xs-12></div></div><div style=height:50px></div><div class=site-footer></div></div></div></article><script></script><script>(function(e,t){const o=t.querySelector("[data-progress-indicator]");if(!o)return;const n=t.createElement("div");n.classList.add("progress-indicator"),n.style.left="-100%",n.style.transform="translateX(-100%)",t.body.appendChild(n);let i=0,s=!1;e.addEventListener("scroll",function(){if(i=e.scrollY,s)return;e.requestAnimationFrame(function(){var t=Math.min(100,i/(o.scrollHeight-e.innerHeight)*100);n.style.transform=`translateX(${t}%)`,s=!1}),s=!0})})(window,document)</script></body></html>
