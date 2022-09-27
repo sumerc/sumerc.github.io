@@ -7,10 +7,9 @@ staticDir = ['static']
 pygmentsUseClasses = true
 pygmentsCodefences = true
 
+
 [markup.highlight]
   guessSyntax = true
-  lineNoStart = 1
-  lineNos = true
   tabWidth = 2
 
 [author]
