@@ -32,7 +32,7 @@ Linux `perf` uses `PMU`(Performance Monitor Unit) counters for sampling. You ins
 
 [`pyspy`](https://github.com/benfred/py-spy) and [`rbspy`](https://github.com/rbspy/rbspy) are famous sampling profilers for Python and Ruby. They both ran as external processes and periodically read the target application memory to capture the stack trace of running threads. In Linux, they use `process_vm_readv`, and if I am not mistaken, this API pauses the target application for a few milliseconds during memory read. Then they chase pointers inside the memory they read to find the currently running thread structure and stack trace information. As one might guess, this is an error-prone and complex approach but works surprisingly well. IIRC, [`pyflame`](https://github.com/uber-archive/pyflame) uses a similar approach too.
 
-Recent profilers like [Parca](parca.dev)(there are few others) use [eBPF](https://ebpf.io/). eBPF is a recent technology that allows to run userland code in the Kernel VM. It is a brilliant technology that is used in lots of areas like security, networking, and observability for sure. I highly suggest reading some information on eBPF; it is a massive topic that goes well beyond the scope of this blog post.
+Recent profilers like [Parca](parca.dev)(there are few others) use [eBPF](https://ebpf.io/). eBPF is a recent technology that allows to run userland code in the Kernel VM. It is a brilliant technology that is used in lots of areas like security, networking, and observability. I highly suggest reading some information on eBPF; it is a massive topic that goes well beyond the scope of this blog post.
 
 # How the profiler is triggered periodically?
 
