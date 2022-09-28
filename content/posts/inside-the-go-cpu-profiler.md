@@ -116,7 +116,7 @@ Having said the above, Go runtime has done a great job of keeping the profiler o
 
 Above is a quote from a [Google thread](https://groups.google.com/g/golang-nuts/c/e6lB8ENbIw8/m/azeTCGj7AgAJ).
 
-And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuous profiler implementation which makes the profiler to **always be enabled**:
+And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuous profiler implementation to make the profiler **always be enabled**:
 
 > After testing this default on many high-volume internal workloads, we've
 determined this default is safe for production.
