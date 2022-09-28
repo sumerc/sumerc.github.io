@@ -59,7 +59,7 @@ A picture is worth a thousand words; below is how Go runtime handles `SIGPROF` s
 
 # How profiler collects data?
 
- Once, a random running goroutine receives a `SIGPROF` signal, it gets interrupted and signal handler runs. The stack trace of the interrupted goroutine is retrieved in the context of this signal handler and then saved into a [lock-free](https://preshing.com/20120612/an-introduction-to-lock-free-programming/) log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf` and it is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. It is a **single-writer**, **single-reader** lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure which resembles the one published [here](http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf). The writer is the profiler signal handler and the reader is a goroutine(`profileWriter`) that periodically reads this buffer and aggregates results to a final hashmap structure in a separate goroutine. This hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
+ Once, a random running goroutine receives a `SIGPROF` signal, it gets interrupted and signal handler runs. The stack trace of the interrupted goroutine is retrieved in the context of this signal handler and then saved into a [lock-free](https://preshing.com/20120612/an-introduction-to-lock-free-programming/) log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf` and it is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. It is a **single-writer**, **single-reader** lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure which resembles the one published [here](http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf). The writer is the profiler signal handler and the reader is a goroutine(`profileWriter`) that periodically reads this buffer and aggregates results to a final hashmap. This final hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
 
 Here is a simple visualization on how this all fits together:
 
@@ -90,7 +90,7 @@ func profileWriter(w io.Writer) {
 }
 ```
 
-Once I have a high-level understanding of this the overall design, the first question I asked to myself was following: 
+Once I have a high-level understanding of the design, I ask following question to myself: 
 
 **Why Go took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?**
 
