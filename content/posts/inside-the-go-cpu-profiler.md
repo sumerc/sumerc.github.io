@@ -110,11 +110,9 @@ In theory, it seems like all above should run in constant time as no allocation 
 
 An excellent example of this is matrix multiplication: during matrix multiplication, CPU heavily accesses individual cells which are sequential in memory. These kinds of cache-friendly applications might produce *worst* overhead for a sampling profiler. While it is tempting to do some benchmarks with `perf` to verify this claim, it is beyond the scope of this blog post.
 
-Having said the above, Go runtime has done a great job of keeping the profiler overhead as predictable and as low as possible. If you don't believe me, which you should not, maybe below can convince you:
+Having said the above, Go runtime has done a great job of keeping the profiler overhead as predictable and as low as possible. If you don't believe me, which you should not, maybe below quote from a discussion [thread](https://groups.google.com/g/golang-nuts/c/e6lB8ENbIw8/m/azeTCGj7AgAJ) can convince you:
 
 > At Google, we continuously profile Go production services, and it is safe to do so.
-
-Above is a quote from a [Google thread](https://groups.google.com/g/golang-nuts/c/e6lB8ENbIw8/m/azeTCGj7AgAJ).
 
 And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuous profiler implementation to make the profiler **always be enabled**:
 
