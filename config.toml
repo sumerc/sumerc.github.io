@@ -19,7 +19,7 @@ pygmentsCodefences = true
 [params]
 extraHead = ''
 mainSections = ["posts"]
-description = "My notes on random stuff about programming"
+description = "My notes on random stuff about tech"
 
 [[params.socials]]
 name = "About"
