@@ -22,17 +22,28 @@ mainSections = ["posts"]
 description = "My notes on random stuff about tech"
 
 [[params.socials]]
+name = "Home"
+link = "/"
+
+[[params.socials]]
+name = "Talks"
+link = "/talks"
+
+[[params.socials]]
 name = "About"
 link = "/about"
 
 [[params.socials]]
-name = "Github"
+name = ""
 link = "https://github.com/sumerc"
+icon = "fab fa-github"
 
 [[params.socials]]
-name = "Twitter"
+name = ""
 link = "https://twitter.com/sumercip"
+icon = "fab fa-twitter"
 
 [[params.socials]]
-name = "RSS"
+name = ""
 link = "/index.xml"
+icon = "fas fa-rss"
