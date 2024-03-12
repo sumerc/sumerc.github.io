@@ -32,18 +32,3 @@ link = "/talks"
 [[params.socials]]
 name = "About"
 link = "/about"
-
-[[params.socials]]
-name = ""
-link = "https://github.com/sumerc"
-icon = "fab fa-github"
-
-[[params.socials]]
-name = ""
-link = "https://twitter.com/sumercip"
-icon = "fab fa-twitter"
-
-[[params.socials]]
-name = ""
-link = "/index.xml"
-icon = "fas fa-rss"
