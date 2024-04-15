@@ -20,6 +20,7 @@ pygmentsCodefences = true
 extraHead = ''
 mainSections = ["posts"]
 description = "My notes on random stuff about tech"
+favicon = "images/favico.svg"
 
 [[params.socials]]
 name = "Home"
