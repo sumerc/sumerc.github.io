@@ -15,16 +15,16 @@ myself how the Go CPU profiler works under the hood. This blog post is the resul
 # Basics
 
 There are two types of profilers:
-1. **tracing**: do measurements whenever a pre-defined event happens. e.g., function called, function exited...etc.
-2. **sampling**: do measurements at regular intervals.
+- tracing: do measurements whenever a pre-defined event happens. e.g., function called, function exited...etc.
+- sampling: do measurements at regular intervals.
 
 Go CPU profiler is a sampling profiler. There is also a [Go execution tracer](https://pkg.go.dev/runtime/trace) which is 
 tracing profiler and traces certain events like acquiring a Lock, GC-related events...etc. 
 
 Sampling profilers usually consist of two essential parts:
 
-1. **sampler**: a callback is called at regular intervals, and a stack trace is usually collected by profiling data. Different profilers use different strategies to trigger the callback.
-2. **data collection**: this is where the profiler collects its data: it might be memory consumption or call count, basically any metric associated with a stack trace.
+- sampler: a callback is called at regular intervals, and a stack trace is usually collected by profiling data. Different profilers use different strategies to trigger the callback.
+- data collection: this is where the profiler collects its data: it might be memory consumption or call count, basically any metric associated with a stack trace.
 
 # A small survey on how other profilers work
 
@@ -51,7 +51,7 @@ if err := pprof.StartCPUProfile(f); err != nil {
 defer pprof.StopCPUProfile()
 ```
 
-Once `pprof.StartCPUProfile` is called, Go runtime enables the `SIGPROF` signal to be generated at specific intervals. The kernel sends a `SIGPROF` signal to one of the **running** threads in the application. Since Go uses non-blocking I/O, goroutines waiting on I/O are not counted as **running**, and the Go CPU Profiler does not catch these. As a side note: this was the basic reason why [fgprof](https://github.com/felixge/fgprof) was implemented. `fgprof` uses [`runtime.GoroutineProfile`](https://pkg.go.dev/runtime#GoroutineProfile) to obtain both on and off-CPU goroutines.
+Once `pprof.StartCPUProfile` is called, Go runtime enables the `SIGPROF` signal to be generated at specific intervals. The kernel sends a `SIGPROF` signal to one of the _running_ threads in the application. Since Go uses non-blocking I/O, goroutines waiting on I/O are not counted as _running_, and the Go CPU Profiler does not catch these. As a side note: this was the basic reason why [fgprof](https://github.com/felixge/fgprof) was implemented. `fgprof` uses [`runtime.GoroutineProfile`](https://pkg.go.dev/runtime#GoroutineProfile) to obtain both on and off-CPU goroutines.
 
 A picture is worth a thousand words; below is how Go runtime handles `SIGPROF` signal:
 
@@ -59,7 +59,7 @@ A picture is worth a thousand words; below is how Go runtime handles `SIGPROF` s
 
 # How profiler collects data?
 
- Once, a random running goroutine receives a `SIGPROF` signal, it gets interrupted and signal handler runs. The stack trace of the interrupted goroutine is retrieved in the context of this signal handler and then saved into a [lock-free](https://preshing.com/20120612/an-introduction-to-lock-free-programming/) log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf` and it is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. It is a **single-writer**, **single-reader** lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure which resembles the one published [here](http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf). The writer is the profiler signal handler and the reader is a goroutine(`profileWriter`) that periodically reads this buffer and aggregates results to a final hashmap. This final hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
+ Once, a random running goroutine receives a `SIGPROF` signal, it gets interrupted and signal handler runs. The stack trace of the interrupted goroutine is retrieved in the context of this signal handler and then saved into a [lock-free](https://preshing.com/20120612/an-introduction-to-lock-free-programming/) log structure along with the current [profiler label](https://rakyll.org/profiler-labels/)(Every captured stack trace can be associated with a custom label which you can later do filtering on). This special lock-free structure is named as `profBuf` and it is defined in [runtime/profbuf.go](https://github.com/golang/go/blob/master/src/runtime/profbuf.go) with a long and detailed explanation on how it works. It is a _single-writer, single-reader_ lock-free [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer) structure which resembles the one published [here](http://www.cse.cuhk.edu.hk/~pclee/www/pubs/ancs09poster.pdf). The writer is the profiler signal handler and the reader is a goroutine(`profileWriter`) that periodically reads this buffer and aggregates results to a final hashmap. This final hashmap structure is named as `profMap` and defined in [runtime/pprof/map.go](https://github.com/golang/go/blob/master/src/runtime/pprof/map.go)
 
 Here is a simple visualization on how this all fits together:
 
@@ -92,7 +92,7 @@ func profileWriter(w io.Writer) {
 
 Once I have a high-level understanding of the design, I ask following question to myself: 
 
-**Why Go took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?**
+Why Go took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?
 
 The answer is in the design itself.
 
@@ -114,16 +114,16 @@ Having said the above, Go runtime has done a great job of keeping the profiler o
 
 > At Google, we continuously profile Go production services, and it is safe to do so.
 
-And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuous profiler implementation to make the profiler **always be enabled**:
+And another one is from a [commit](https://github.com/DataDog/dd-trace-go/commit/54604a13335b9c5e4ac18a898e4d5971b6b6fc8c) from DataDog's continuous profiler implementation to make the profiler _always be enabled_:
 
 > After testing this default on many high-volume internal workloads, we've
 determined this default is safe for production.
 
 And as a final note, based on the above theory, we can make following observation:
 
-**The profiler overhead will be minimum on typical I/O bound applications.**
+The profiler overhead will be minimum on typical I/O bound applications.
 
-This is because CPU cache trashing does not make much difference when there are many sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally **zero** (or statistically insignificant) overhead on typical I/O bound applications. But, again, providing empirical evidence is beyond the scope of this blog post one can do it by observing the throughput during a load testing of a Go web application while the profiler is on and off.
+This is because CPU cache trashing does not make much difference when there are many sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally __zero__ (or statistically insignificant) overhead on typical I/O bound applications. But, again, providing empirical evidence is beyond the scope of this blog post one can do it by observing the throughput during a load testing of a Go web application while the profiler is on and off.
 
 # Conclusion
 
