@@ -1,7 +1,21 @@
 ---
 title: "Inside the Go CPU profiler"
+description: "How does the Go CPU profiler works under the hood?"
 date: 2022-09-26T18:42:25+03:00
 draft: false
+toc:
+  - title: "Basics"
+    id: "basics"
+  - title: "A small survey on how other profilers work"
+    id: "a-small-survey-on-how-other-profilers-work"
+  - title: "How the profiler is triggered periodically?"
+    id: "how-the-profiler-is-triggered-periodically"
+  - title: "How profiler collects data?"
+    id: "how-profiler-collects-data"
+  - title: "Overhead"
+    id: "overhead"
+  - title: "Conclusion"
+    id: "conclusion"
 ---
 
 

@@ -7,7 +7,6 @@ staticDir = ['static']
 pygmentsUseClasses = true
 pygmentsCodefences = true
 
-
 [markup.highlight]
   guessSyntax = true
   tabWidth = 2
