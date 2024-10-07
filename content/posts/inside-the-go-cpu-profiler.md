@@ -42,7 +42,7 @@ Sampling profilers usually consist of two essential parts:
 
 # A small survey on how other profilers work
 
-**Linux perf** uses **PMU(Performance Monitor Unit)** counters for sampling. You instruct the PMU to generate an interrupt after some event happens N times. An example might be to tick in every 1000 CPU clock cycles. A [detailed article](https://easyperf.net/blog/2018/06/01/PMU-counters-and-profiling-basics) written by Denis Bakhvalov explains how tools like Linux perf and VTune use PMU counters to make this happen. Once the data collection callback is triggered at regular intervals, all is left to collect stack traces and aggregate them properly. To be complete, Linux perf uses `perf_event_open(PERF_SAMPLE_STACK_USER,...)` to obtain stack trace information. The captured stack traces are written to userspace via mmap'd ring buffer.
+**Linux perf** uses PMU(Performance Monitor Unit) counters for sampling. You instruct the PMU to generate an interrupt after some event happens N times. An example might be to tick in every 1000 CPU clock cycles. A [detailed article](https://easyperf.net/blog/2018/06/01/PMU-counters-and-profiling-basics) written by Denis Bakhvalov explains how tools like Linux perf and VTune use PMU counters to make this happen. Once the data collection callback is triggered at regular intervals, all is left to collect stack traces and aggregate them properly. To be complete, Linux perf uses `perf_event_open(PERF_SAMPLE_STACK_USER, ...)` to obtain stack trace information. The captured stack traces are written to userspace via mmap'd ring buffer.
 
 [pyspy](https://github.com/benfred/py-spy) and [rbspy](https://github.com/rbspy/rbspy) are famous sampling profilers for Python and Ruby. They both ran as external processes and periodically read the target application memory to capture the stack trace of running threads. In Linux, they use `process_vm_readv`, and if I am not mistaken, this API pauses the target application for a few milliseconds during memory read. Then they chase pointers inside the memory they read to find the currently running thread structure and stack trace information. As one might guess, this is an error-prone and complex approach but works surprisingly well. [pyflame](https://github.com/uber-archive/pyflame) uses a similar approach too.
 
@@ -79,7 +79,7 @@ Here is a simple visualization on how this all fits together:
 
 ![SIGPROF handler](/sigprof_handler.png)
 
-As can be seen, the final structure resembles the regular `pprof.Profile` object a lot: it is a a hashmap where the key is stack trace + label and the value is the number of times where this callstack is observed in the application. When `pprof.StopCPUProfile` is called, profiling stops and the `profileWriter` goroutine calls `build()` function which is implemented [here](https://github.com/golang/go/blob/aa4299735b78189eeac1e2c4edafb9d014cc62d7/src/runtime/pprof/proto.go#L348). This function is responsible for writing this `profMap` structure to the `io.Writer` object that is provided in the initial `pprof.StartCPUProfile` call. Basically this is where the final [`pprof.Profile`](https://pkg.go.dev/runtime/pprof#Profile) object is generated. 
+As can be seen, the final structure resembles the regular `pprof.Profile` object a lot: it is a a hashmap where the key is stack trace + label and the value is the number of times where this callstack is observed in the application. When `pprof.StopCPUProfile` is called, profiling stops and [`profileWriter.build`](https://github.com/golang/go/blob/aa4299735b78189eeac1e2c4edafb9d014cc62d7/src/runtime/pprof/proto.go#L348) gets called. This function is responsible for writing this `profMap` structure to the `io.Writer` object that is provided in the initial `pprof.StartCPUProfile` call. This is where the final [`pprof.Profile`](https://pkg.go.dev/runtime/pprof#Profile) object is generated. 
 
 Pseudocode for `profileWriter` might be helpful here:
 
@@ -104,11 +104,7 @@ func profileWriter(w io.Writer) {
 }
 ```
 
-Once I have a high-level understanding of the design, I ask following question to myself: 
-
 Why Go took all the trouble for implementing a unique lock-free structure just for holding temporary profiling data? Why not write everything to a hashmap periodically?
-
-The answer is in the design itself.
 
 Look at the first thing that the `SIGPROF` handler does is to disable memory allocation. Additionally, the profiler code path does not involve any locks and even the maximum depth of stack trace is hardcoded. As of Go 1.19, it is [64](https://github.com/golang/go/blob/54cf1b107d24e135990314b56b02264dba8620fc/src/runtime/cpuprof.go#L22). All these details are there to provide a more efficient and predictable overhead for the profiler. Low and predictable performance is key for a production-ready profiler. 
 
@@ -120,7 +116,7 @@ Based on the design, should the profiler overhead be constant? Well, it depends.
 2. stack walk happens, and Go runtime saves the stack trace to a lock-free ring buffer,
 3. the goroutine is resumed.
 
-In theory, it seems like all above should run in constant time as no allocation and locks are happening. ~~While I could not find the reference, I remember all the~~ And this is true: all above happens in around ~~~10 nanoseconds~~ ~1 microseconds (on a typical CPU)*([Corrected](https://twitter.com/felixge/status/1574762438225960960) by Felix Geisendörfer)*. But, in practice, it becomes much worse. If you search for the "overhead of the Go CPU profiler", you will see numbers ranging from [%0.5](https://cloud.google.com/blog/products/management-tools/in-tests-cloud-profiler-adds-negligible-overhead) to [%1-%5](https://medium.com/google-cloud/continuous-profiling-of-go-programs-96d4416af77b) ~~and even `%10`~~*(no public mention was found on this number and no emprirical evidence, too)*. The reason behind this is mostly related to how CPUs work. Modern CPUs are complex beasts. They cache aggressively. A typical single CPU core has three layers of cache: L1, L2, and L3. When a specific CPU-intensive code is running, these caches are highly utilized. High cache utilization is especially true for some applications where small(data that can fit in cache) and sequential data is read heavily. 
+In theory, it seems like all above should run in constant time as no allocation and locks are happening. ~~While I could not find the reference, I remember all the~~ And this is true: all above happens in around ~~~10 nanoseconds~~ ~1 microseconds (on a typical CPU)*([Corrected](https://twitter.com/felixge/status/1574762438225960960) by Felix Geisendörfer)*. But, in practice, it becomes much worse. If you search for the "overhead of the Go CPU profiler", you will see numbers ranging from [%0.5](https://cloud.google.com/blog/products/management-tools/in-tests-cloud-profiler-adds-negligible-overhead) to [%1-%5](https://medium.com/google-cloud/continuous-profiling-of-go-programs-96d4416af77b) ~~and even %10~~*(no public mention was found on this number and no emprirical evidence, too)*. The reason behind this is mostly related to how CPUs work. Modern CPUs are complex beasts. They cache aggressively. A typical single CPU core has three layers of cache: L1, L2, and L3. When a specific CPU-intensive code is running, these caches are highly utilized. High cache utilization is especially true for some applications where small(data that can fit in cache) and sequential data is read heavily. 
 
 An excellent example of this is matrix multiplication: during matrix multiplication, CPU heavily accesses individual cells which are sequential in memory. These kinds of cache-friendly applications might produce *worst* overhead for a sampling profiler. While it is tempting to do some benchmarks with `perf` to verify this claim, it is beyond the scope of this blog post.
 
@@ -137,13 +133,12 @@ And as a final note, based on the above theory, we can make following observatio
 
 The profiler overhead will be minimum on typical I/O bound applications.
 
-This is because CPU cache trashing does not make much difference when there are many sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks: there is literally __zero__ (or statistically insignificant) overhead on typical I/O bound applications. But, again, providing empirical evidence is beyond the scope of this blog post one can do it by observing the throughput during a load testing of a Go web application while the profiler is on and off.
+This is because CPU cache trashing does not make much difference when there are many sleeping/idle goroutines. We have observed this over and over during our Go CPU profiler benchmarks-- there is literally _zero_ (or statistically insignificant) overhead on typical I/O bound applications. Providing empirical evidence is beyond the scope of this blog post. One way to do it might be to observe the throughput during load testing with the profiler on and off.
 
 # Conclusion
 
-One of the things I love about this design is that it proves how well you can optimize code depending on how well you understand the access patterns of your underlying data structures. In this case, Go runtime uses a lock-free structure, even though it would be a complete overkill for most of the time. Go runtime is full of clever optimizations like these, and I highly suggest you take the time to dive into the parts that you find interesting.
+One aspect I admire about this design is how it showcases the power of optimization when you deeply understand the access patterns of your underlying data structures. For instance, the Go runtime leverages a lock-free structure, which might seem like overkill for most situations. Yet, this choice reflects the depth of thought behind Go’s performance strategies. The runtime is filled with similar clever optimizations, and I highly recommend exploring the parts that capture your interest.
 
-I hope you enjoyed it!
 
 # References
 
