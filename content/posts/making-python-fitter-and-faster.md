@@ -195,7 +195,7 @@ There is a [paper](https://dl.acm.org/doi/10.1145/3485513) elaborating this tech
 
 The concept is similar to traditional JIT compilers: Python performs a tracing step to identify potential hotspots and then converts them to machine code. Instead of dynamically compiling code, static pre-compiled bytecodes are copied into memory and patched during runtime. This means that as the program executes, only specific segments of the machine code are modified on-the-fly—hence the term “copy-and-patch.” 
 
-In this [insightful talk](https://www.youtube.com/watch?v=kMO3Ju0QCDo), Brandt Bucher provides a perfect demonstration of how copy-and-patch works under the hood. I attempted to visualize the concept based on what I learned to deepen my understanding:
+In this [insightful talk](https://www.youtube.com/watch?v=kMO3Ju0QCDo), Brandt Bucher provides a perfect demonstration of how copy-and-patch works under the hood. I attempted to visualize the concept based on what I learned from the talk:
 
 ![](/jitflow.png)
 
