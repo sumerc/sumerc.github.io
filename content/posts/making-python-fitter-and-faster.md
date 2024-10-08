@@ -2,7 +2,7 @@
 title: "In the Making of Python Fitter and Faster"
 description: "The how and why of Python's recent performance gains"
 date: 2024-10-04T18:49:37+03:00
-draft: true
+draft: false
 toc:
   - title: "Python’s Performance Revolution"
     id: "pythons-performance-revolution"
