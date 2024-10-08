@@ -31,7 +31,9 @@ But make no mistake: there's no magic here. In my humble opinion, the success ca
 
     Python is widely used across many industries, which has led to an extensive accumulation of quality profiling data. This data, drawn from real-world production workloads like [Instagram’s Cinder](https://www.youtube.com/watch?v=xGY45EmhwrE) and platforms like [speed.python.org](http://speed.python.org) and many more helps pinpoint hot spots. 
 
-    This data-driven approach ensures optimizations are targeted where they matter most. There was no room for premature optimization from the start. See, for example, [Shannon’s talk](https://www.youtube.com/watch?v=dgrtgtT-UXM), listing the execution time per component:
+    This data-driven approach ensures optimizations are targeted where they matter most. There was no room for premature optimization from the start. 
+    
+    See [Shannon’s talk](https://www.youtube.com/watch?v=dgrtgtT-UXM), listing the execution time per component:
 
 ![Shannon's Talk](/shannon1.png)
 
