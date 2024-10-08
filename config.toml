@@ -26,6 +26,10 @@ name = "Home"
 link = "/"
 
 [[params.socials]]
+name = "Articles"
+link = "/articles"
+
+[[params.socials]]
 name = "Talks"
 link = "/talks"
 
