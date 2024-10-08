@@ -27,7 +27,9 @@ But make no mistake: there's no magic here. In my humble opinion, the success ca
 - **Dedication**: People, including Guido van Rossum himself, are working full-time on making Python faster. This commitment is crucial. It enables bold, low-level, core changes that drive performance improvements.
 - **Talent and Effort**: [Mark Shannon](https://www.linkedin.com/in/mark-shannon-bb459551/) has been grappling with this problem for nearly a decade, refining ideas and approaches over time. Including talented people like [Brandt Bucher](https://www.youtube.com/watch?v=kMO3Ju0QCDo) and many more…
 - **Approachability**: CPython’s codebase remains approachable and relatively simple, which fosters experimentation. Complex optimizations, like part of JIT compilation, have been implemented by [two undergraduate students](https://www.youtube.com/watch?v=p57zI4qPVZY) within two years, highlighting the fact that it does not require years of expertise to be around the development. 
-- **Accumulation of Quality Profiling Data**: This aspect is somewhat overlooked in my opinion. Python is widely used across many industries, which has led to an extensive accumulation of quality profiling data. This data, drawn from real-world production workloads like [Instagram’s Cinder](https://www.youtube.com/watch?v=xGY45EmhwrE) and platforms like [speed.python.org](http://speed.python.org) and many more helps pinpoint hot spots. 
+- **Accumulation of Quality Profiling Data**: This aspect is somewhat overlooked in my opinion. 
+
+    Python is widely used across many industries, which has led to an extensive accumulation of quality profiling data. This data, drawn from real-world production workloads like [Instagram’s Cinder](https://www.youtube.com/watch?v=xGY45EmhwrE) and platforms like [speed.python.org](http://speed.python.org) and many more helps pinpoint hot spots. 
 
     This data-driven approach ensures optimizations are targeted where they matter most. There was no room for premature optimization from the start. See, for example, [Shannon’s talk](https://www.youtube.com/watch?v=dgrtgtT-UXM), listing the execution time per component:
 
