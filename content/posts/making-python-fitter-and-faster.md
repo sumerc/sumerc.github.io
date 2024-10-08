@@ -221,6 +221,6 @@ Simply upgrading to Python 3.11 or 3.12 can result in substantial performance ga
 
 Python 3.13 introduces the initial groundwork for JIT compilation, but it’s still in its early stages. The primary goal for JIT in Python 3.13 is to provide a foundation for further development and to offer a preliminary version for experimentation and community feedback.
 
-However, with **Python 3.14**, JIT is expected to mature significantly, bringing tangible performance improvements. The core team aims to leverage JIT as a key optimization strategy, and Python 3.14 is likely to showcase these advancements with substantial speedups.
+However, with **Python 3.14**, JIT is expected to mature significantly, bringing tangible performance improvements. The core team aims to leverage JIT as a key optimization strategy.
 
 Before wrapping up, it’s worth noting that these performance improvements don’t just apply to pure Python code. **C extensions** like NumPy, Pandas, and other popular libraries could also benefit from the faster interpreter loop and reduced function call overhead. This means that upgrading to Python 3.11 or later may result in noticeable speedups in data processing and scientific computing tasks, even if the underlying C extension code remains unchanged.
