@@ -8,6 +8,13 @@ toc:
     id: "pythons-performance-revolution"
   - title: "No Free Lunch: The Science and Sweat Behind the Speed"
     id: "no-free-lunch-the-science-and-sweat-behind-the-speed"
+    subitems:
+      - title: "Specialized, Adaptive Interpreter"
+        id: "1-specialized-adaptive-interpreter"
+      - title: "Better Memory Management"
+        id: "2-better-memory-management"
+      - title: "JIT"
+        id: "3-jit"
   - title: "Crossing the Finish Line"
     id: "crossing-the-finish-line"
 ---
