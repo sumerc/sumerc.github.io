@@ -153,9 +153,9 @@ Before we move further, please let’s pause to consider and appreciate what jus
 
 Less memory almost always means better cache utilization, thus optimizing for memory brings **compounding benefits**.
 
-In [this talk](https://www.youtube.com/watch?v=dgrtgtT-UXM), Mark Shannon discusses how they reduced the size of the base Python object. Since everything in Python is an object, minimizing the memory footprint of Python objects is almost always beneficial. The talk goes into the finer details on how this was achieved over the years. 
+In [this talk](https://www.youtube.com/watch?v=dgrtgtT-UXM), Mark Shannon discusses how they reduced the size of the base Python object. Since everything in Python is an object, minimizing the memory footprint of Python objects is almost always beneficial. The talk goes into the finer details on how this was achieved over the years.
 
-I’d like to provide a brief summary of what happened through the years:
+I’d like to provide a brief summary of what I learned from the talk:
 
 ![](/memtimeline.png)
 
@@ -183,11 +183,11 @@ Before delving deep to explain what what this copy-and-patch means, let’s take
 
 Interpreted languages like Java,Node.js and Python work on intermediate bytecode. 
 
-The VM executes this bytecode and with the help of an efficient runtime profiler, hot spots in the code are identified. These hotspots are sent to **JIT(Just-In-Time)** compiler to be compiled to machine code. 
+The VM executes this bytecode and with the help of an efficient runtime profiler, hot spots in the code are identified. These hotspots are then sent to **JIT(Just-In-Time)** compiler to be compiled to machine code. 
 
 For example, the Java Virtual Machine (JVM) leverages the LLVM framework to convert these hotspot bytecodes into machine code, allowing the runtime to switch to native instructions for faster execution.
 
-Another method, called **AOT(Ahead-Of-Time)** Compilation, can also be used to complement JIT compilation. In AOT, parts of the code are optimized and compiled even before the program is run. However, since there is no runtime profiling data available, AOT relies on static code analysis and heuristic techniques to predict potential hotspots.
+Another method, called **AOT(Ahead-Of-Time)** Compilation, can also be used to complement JIT compilation. In AOT, parts of the code are optimized and compiled even before the program is run. Since there is no runtime profiling data available, AOT relies on static code analysis and heuristic techniques to predict potential hotspots.
 
 Python, on the other hand, adopts a distinct and somewhat novel approach called **“copy-and-patch.”** 
 
@@ -195,7 +195,9 @@ There is a [paper](https://dl.acm.org/doi/10.1145/3485513) elaborating this tech
 
 The concept is similar to traditional JIT compilers: Python performs a tracing step to identify potential hotspots and then converts them to machine code. Instead of dynamically compiling code, static pre-compiled bytecodes are copied into memory and patched during runtime. This means that as the program executes, only specific segments of the machine code are modified on-the-fly—hence the term “copy-and-patch.” 
 
-In this [insightful talk](https://www.youtube.com/watch?v=kMO3Ju0QCDo), Brandt Bucher provides a perfect demonstration of how copy-and-patch works under the hood. I attempted to visualize the concept based on what I learned from the talk:
+In this [insightful talk](https://www.youtube.com/watch?v=kMO3Ju0QCDo), Brandt Bucher provides a perfect demonstration of how copy-and-patch works under the hood. 
+
+Here is my attempt to visualize the concept based on what I learned from the talk:
 
 ![](/jitflow.png)
 
@@ -209,7 +211,7 @@ This approach has several benefits:
 
     While it may not match the performance of a handcrafted assembly JIT like LuaJIT in every scenario, it offers comparable compilation speeds and is only around ~35% slower in execution on certain benchmarks.
 
-It’s still early days for this approach, and there are questions about its limitations and long-term impact. But it’s undeniably a promising and more approachable alternative to implementing a full-fledged JIT compiler.
+It’s still early days for this approach, but it’s undeniably a promising and more approachable alternative to implementing a full-fledged JIT compiler.
 
 # Crossing the Finish Line
 
@@ -219,10 +221,10 @@ From the official release notes(https://docs.python.org/3/whatsnew/3.11.html#fas
 
 > CPython 3.11 is an average of 25% faster than CPython 3.10 as measured with the pyperformance benchmark suite, when compiled with GCC on Ubuntu Linux. Depending on your workload, the overall speedup could be 10-60%.
 
-Simply upgrading to Python 3.11 or 3.12 can result in substantial performance gains, making these versions well worth considering for production deployments. This trend is set to continue with Python 3.13 and beyond.
+Python 3.13 introduces the initial groundwork for JIT compilation, but it’s still in its early stages. 
 
-Python 3.13 introduces the initial groundwork for JIT compilation, but it’s still in its early stages. The primary goal for JIT in Python 3.13 is to provide a foundation for further development and to offer a preliminary version for experimentation and community feedback.
+However, with **Python 3.14**, JIT is expected to mature significantly, bringing tangible performance improvements.
 
-However, with **Python 3.14**, JIT is expected to mature significantly, bringing tangible performance improvements. The core team aims to leverage JIT as a key optimization strategy.
+It’s also worth noting that these performance improvements don’t just apply to pure Python code. **C extensions** like NumPy, Pandas, and other popular libraries could also benefit from the faster interpreter loop and reduced function call overhead.
 
-Before wrapping up, it’s worth noting that these performance improvements don’t just apply to pure Python code. **C extensions** like NumPy, Pandas, and other popular libraries could also benefit from the faster interpreter loop and reduced function call overhead. This means that upgrading to Python 3.11 or later may result in noticeable speedups in data processing and scientific computing tasks, even if the underlying C extension code remains unchanged.
+In summary, upgrading to Python 3.11 or 3.12 can lead to significant performance improvements, making these versions highly recommended for production deployments. This trend is set to continue with Python 3.13 and beyond. For instance, in my current company, [Upsun](https://upsun.com/), we almost always recommend users to use the latest version of their [runtime](https://docs.upsun.com/languages/python.html).
