@@ -103,7 +103,7 @@ This process is part of specialization, where the interpreter replaces one or mo
 
 It's important to note that Python specializes one bytecode at a time. 
 
-It doesn’t attempt to understand the broader context of what the application is doing to find the most optimal superinstruction for a particular problem. In compilers, such optimizations are possible—you can even implement something like strlen using a set of assembly instructions. 
+It doesn’t attempt to understand the broader context of what the application is doing to find the most optimal superinstruction for a particular problem. In compilers, such optimizations are possible—you can even implement something like `strlen` using a set of assembly instructions. 
 
 Python doesn’t take this approach. Its specialization is more limited, operating on a per-instruction basis.
 
