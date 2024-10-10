@@ -97,7 +97,7 @@ Few changes already! Let’s inspect one by one:
 0 RESUME_QUICK             0
 {{< /highlight >}}
 
-The first change is being the `RESUME` -> `RESUME_QUICK` change. It is a quickened form of `RESUME`: it skips some of the setup and check that RESUME performs. 
+The first change is being the `RESUME` -> `RESUME_QUICK` change. It is a quickened form of `RESUME`: it skips some of the setup and check that `RESUME` performs. 
 
 This process is part of specialization, where the interpreter replaces one or more instructions with more efficient ones based on observed patterns. We call this faster variants **superinstructions**. 
 
@@ -147,8 +147,6 @@ Let’s call our function 11 more times, but this time only with float’s:
 {{< /highlight >}}
 
 Notice the change? The adaptive instruction is gone. Interpreter became confident enough to optimize this code by replacing the instruction with a specialized one: `BINARY_OP_MULTIPLY_FLOAT`. This is called **specialization.**
-
-According to https://peps.python.org/pep-0659/#performance, using specialized interpreter on Python 3.11, resulted speedups in the range of %10-%60 for some workloads. 
 
 There are tradeoffs though. One of them is memory-- each specialization introduces a small memory cost, as the interpreter needs to store runtime information alongside the instruction. This is managed through an **inline cache**. 
 
@@ -226,7 +224,7 @@ The results speak for themselves.
 
 From the official release notes(https://docs.python.org/3/whatsnew/3.11.html#faster-cpython):
 
-> CPython 3.11 is an average of 25% faster than CPython 3.10 as measured with the pyperformance benchmark suite, when compiled with GCC on Ubuntu Linux. Depending on your workload, the overall speedup could be 10-60%.
+> CPython 3.11 is an average of 25% faster than CPython 3.10 as measured with the pyperformance benchmark suite, when compiled with GCC on Ubuntu Linux. Depending on your workload, the overall speedup could be ~10-60%.
 
 Python 3.13 introduces the initial groundwork for JIT compilation, but it’s still in its early stages. 
 
