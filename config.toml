@@ -7,6 +7,10 @@ staticDir = ['static']
 pygmentsUseClasses = true
 pygmentsCodefences = true
 
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+
 [markup.highlight]
   guessSyntax = true
   tabWidth = 2
