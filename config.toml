@@ -15,15 +15,16 @@ pygmentsCodefences = true
   guessSyntax = true
   tabWidth = 2
 
-[author]
-  name = "Sümer Cip"
-  homepage = "https://sumercip.com/"
-
 [params]
 extraHead = ''
 mainSections = ["posts"]
 description = "My notes on random stuff about tech"
 favicon = "/images/favico.svg"
+
+[params.author]
+name = "Sümer Cip"
+homepage = "https://sumercip.com/"
+
 
 [[params.socials]]
 name = "Home"
