@@ -150,7 +150,7 @@ Notice the change? The adaptive instruction is gone. Interpreter became confiden
 
 There are tradeoffs though. One of them is memory-- each specialization introduces a small memory cost, as the interpreter needs to store runtime information alongside the instruction. This is managed through an **inline cache**. 
 
-Inline caches are dynamically managed to avoid excessive memory consumption and how the system falls back to generic execution if cache misses occur frequently. The [PEP](https://peps.python.org/pep-0659/#costs) also provides a detailed analysis of memory usage related to this process. 
+Inline caches are dynamically managed to avoid excessive memory consumption and the system falls back to generic execution if cache misses occur frequently. The [PEP](https://peps.python.org/pep-0659/#costs) also provides a detailed analysis of memory usage related to this process. 
 
 Before we move further, please let’s pause to consider and appreciate what just happened. The interpreter optimized the code at runtime by collecting data and making bytecode-level adjustments based on that information, leading to faster execution! If this is not something impressive and inspiring, I don’t know what is.
 
