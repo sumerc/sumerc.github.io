@@ -117,7 +117,9 @@ Now that we've explored some characteristics of telemetry data, let's outline a 
 
     > If you submit a query and can get a cup of coffee while you wait for results to return, you’re fighting a losing battle with a tool unfit for production.
 
-    This is no easy task. First, as we discussed earlier, the filters or aggregates needed are not known until query time. Second, analytical queries demand extensive data reads. For example, if you want to query error trends by region in your cluster over the past week, the system must read a vast amount of data. This is different from point queries like searching for specific trace IDs, which involve smaller, more targeted reads.
+    This is no easy task. First, as we discussed earlier, the filters or aggregates needed are not known until query time. Second, analytical queries demand extensive data reads. 
+    
+    For example, if you want to query error trends by region in your cluster over the past week, the system must read a vast amount of data. This is different from point queries like searching for specific trace IDs, which involve smaller, more targeted reads.
 
     The infrastructure should be capable of handling these large-scale queries efficiently, avoiding sharp spikes in tail latencies. In other words, it needs to manage both the heavy workload of analytical queries and the lighter demands of point queries, ensuring smooth performance across the board.
 
@@ -266,7 +268,9 @@ My aim is to show some of the capabilities a message queue like Kafka has to off
 
     In our context, this means the system should slow down or reject successful responses until the data is successfully written to the message queue. Consequently, messages will be buffered on the Agent or application until they are ingested successfully. This is where the principle that _"clients are a crucial part of any distributed system"_ comes into play. Backpressure must be managed seamlessly from downstream all the way up to upstream components.
 
-- **Streaming**: A message queue can also be used in real-time stream processing architectures. While not every message queue supports streaming database functionalities, Kafka allows applications to process data as it arrives, enabling use cases like real-time alerting systems. With tools like Kafka Streams or [ksqlDB](https://www.confluent.io/product/ksqldb/), streaming analytics, and transformation can be applied to fresh data as it flows through the system. Streaming capabilities can also be used to analyze traffic patterns of tenants to make clever decisions on more efficient distribution of bursty writes.
+- **Streaming**: A message queue can also be used in real-time stream processing architectures. While not every message queue supports streaming database functionalities, Kafka allows applications to process data as it arrives, enabling use cases like real-time alerting systems. 
+
+With tools like Kafka Streams or [ksqlDB](https://www.confluent.io/product/ksqldb/), streaming analytics, and transformation can be applied to fresh data as it flows through the system. Streaming capabilities can also be used to analyze traffic patterns of tenants to make clever decisions on more efficient distribution of bursty writes.
 
 We mentioned a whole lot of Kafka and how it is used in a real-world observability pipeline. However, it is not the only solution. 
 
