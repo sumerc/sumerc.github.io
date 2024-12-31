@@ -79,7 +79,7 @@ Let’s walk over some of these characteristics:
 
 ![](/dim-card.png)
 
-- **High cardinality**: Some dimensions in telemetry data can have high cardinality. Querying based on high-cardinality fields like `user-id` or `request-id` can be incredibly valuable for debugging complex production issues. However, scaling high-cardinality fields in traditional time-series databases is notoriously difficult as [we have already touched](#rethinking-storage-beyond-the-boundaries-of-time-series-databases). For more information, check out [this](https://www.honeycomb.io/getting-started/understanding-high-cardinality-role-observability) and [this](https://blog.cloudflare.com/how-cloudflare-runs-prometheus-at-scale).
+- **High cardinality**: Some dimensions in telemetry data can have high cardinality. Querying based on high-cardinality fields like `user-id` or `request-id` can be incredibly valuable for debugging complex production issues. However, scaling high-cardinality fields in traditional time-series databases is notoriously difficult as [we will touch](#rethinking-storage-beyond-the-boundaries-of-time-series-databases) soon.(#rethinking-storage-beyond-the-boundaries-of-time-series-databases). For more information, check out [this](https://www.honeycomb.io/getting-started/understanding-high-cardinality-role-observability) and [this](https://blog.cloudflare.com/how-cloudflare-runs-prometheus-at-scale).
 
 ![](/high-card.png)
 
