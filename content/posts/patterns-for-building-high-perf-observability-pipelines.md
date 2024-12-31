@@ -237,7 +237,7 @@ Ben Hartshorne from Honeycomb even has a famous saying:
 
 > Kafka is the “beating heart” of Honeycomb, powering our 99.99% ingest availability SLO
 
-I have zero intention of going internals of Kafka in this blog post. Briefly, Kafka is essentially a distributed log system. A producer receives the telemetry data and quickly forwards it to a Kafka topic. The, a consumer reads messages from the topic, processes them, and forwards them to storage.
+I have zero intention of going internals of Kafka in this blog post. But to put it briefly: Kafka is essentially a distributed log system. A producer receives the telemetry data and quickly forwards it to a Kafka topic. The, a consumer reads messages from the topic, processes them, and forwards them to storage.
 
 My aim is to show some of the capabilities a message queue like Kafka has to offer:
 
