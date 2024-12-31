@@ -351,7 +351,7 @@ Typical [OLTP(Online Transactional Processing)](https://en.wikipedia.org/wiki/On
 
 In contrast, [OLAP](https://en.wikipedia.org/wiki/Online_analytical_processing)(Online Analytical Processing) workloads specialize in **read-heavy aggregations**, focusing on reading large volumes of rows and summarizing them. This data access pattern closely mirrors that of observability queries, making OLAP databases an ideal choice for such workloads, as detailed in the above section: [Anatomy of Telemetry Data](#anatomy-of-telemetry-data).
 
-**In a typical analytical query, you often read many rows (or data points) but only a few columns**. This workload is significantly more efficient when using a columnar format, as it minimizes unnecessary data retrieval. This is the key reason why OLAP databases typically employ a columnar format for data storage. 
+Moveover, in a typical analytical query, you often **read many rows (or data points) but only a few columns**. This workload is significantly more efficient when using a columnar format, as it minimizes unnecessary data retrieval. This is the key reason why OLAP databases typically employ a columnar format for data storage. 
 
 A notable example is found in the original [Dremel paper](https://static.googleusercontent.com/media/research.google.com/tr//pubs/archive/36632.pdf), where Google experimented with storing data in both columnar and record-oriented formats. The results were striking: **query latencies dropped from hours to minutes when using columnar storage**.
 
