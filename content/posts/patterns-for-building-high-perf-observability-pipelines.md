@@ -23,8 +23,8 @@ toc:
       - title: "Ingestion"
         id: "ingestion"
         subitems:
-          - title: "Pattern 2: The Mighty Message Queues"
-            id: "pattern-2-the-mighty-message-queues"
+          - title: "Pattern 2: The Mighty Message Queue"
+            id: "pattern-2-the-mighty-message-queue"
       - title: "Storage"
         id: "storage"
         subitems:
@@ -229,7 +229,7 @@ These requirements make ingestion phase inherently complex and critical, which e
 
 Yet, common patterns still do emerge.
 
-### Pattern 2: The Mighty Message Queues
+### Pattern 2: The Mighty Message Queue
 
 Using a message queue in the Ingestion layer solves a hell of a lot of complex, distributed system problems ranging from **fault tolerance**, **consistency** to **scalability** and **availability**. That is the key reason why big observability vendors have been using Kafka heavily in their ingestion pipelines. 
 
