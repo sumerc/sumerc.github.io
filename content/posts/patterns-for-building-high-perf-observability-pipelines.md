@@ -87,7 +87,7 @@ Let’s walk over some of these characteristics:
 
     For instance, OpenTelemetry defines a custom [LogAttributes](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/2027679fcfa858d0567f4950bffff51585a43c53/exporter/clickhouseexporter/exporter_logs.go#L152) field in its Clickhouse Log exporter to accommodate such needs, storing an arbitrary number of key/value pairs in a [Clickhouse Map](https://clickhouse.com/docs/en/sql-reference/data-types/map) column.
 
-- **Temporality**: It is highly unlikely that telemetry data older than a month will be accessed. Most of the time, only recent data, spanning a few hours or a few days is queried. In fact, we can even say that the likelihood of the data being accessed drops exponentially with time.
+- **Temporality**: It is highly unlikely that telemetry data older than a month will be accessed. Most of the time, only recent data, spanning a few hours or a few days is queried. In fact, we can even say that **the likelihood of the data being accessed drops exponentially with time**.
 
     This is also an important characteristic of telemetry data if you are desining an pipeline over it since this means caching would have enourmous benefits. I remember DataDog achieves [~%98 cache hit rate](https://www.youtube.com/watch?v=mNneCaZewTg) with local caching of telemetry data in their event storage system.
 
@@ -111,7 +111,7 @@ Now that we've explored some characteristics of telemetry data, let's outline a 
 
 - **Freshness**: Ingested data should be queryable in real-time or with very low latency. This is critical for debugging outages or meeting alerting rules. Serious observability vendors should have SLOs to ensure data freshness.
 
-- **“Fast” query times**: Fast is highly subjective. However, we can say that the query should finish ideally in sub-seconds or in a few seconds at worst. 
+- **“Fast” query times**: Fast is highly subjective. However, we can say that the query should finish ideally in **sub-seconds or in a few seconds at worst**. 
 
     Here is how this is described in the Observability Engineering book from Honeycomb engineers:
 
@@ -121,7 +121,7 @@ Now that we've explored some characteristics of telemetry data, let's outline a 
 
     The infrastructure should be capable of handling these large-scale queries efficiently, avoiding sharp spikes in tail latencies. In other words, it needs to manage both the heavy workload of analytical queries and the lighter demands of point queries, ensuring smooth performance across the board.
 
-- **Enough Retention**: We mentioned in the [Anatomy of Telemetry Data](#anatomy-of-telemetry-data) section that older data is unlikely to be accessed. I have yet to encounter a scenario where I needed to read six-month-old telemetry data to debug an issue in my career. However, it might have use cases in long-term trend analysis or fulfilling regulatory requirements—though, to be honest, I’m not entirely sure.
+- **Enough Retention**: We mentioned in the [Anatomy of Telemetry Data](#anatomy-of-telemetry-data) section that older data is unlikely to be accessed. And I have yet to encounter a scenario where I needed to read six-month-old telemetry data to debug an issue in my career. However, it might have use cases in long-term trend analysis or fulfilling regulatory requirements—though, to be honest, I’m not entirely sure.
 
     I am reading a [post from Observe](https://www.observeinc.com/blog/does-long-term-data-retention-matter-in-observability-users-say-yes/) that asks the users following question:
 
@@ -231,7 +231,7 @@ Yet, common patterns still do emerge.
 
 ### Pattern 2: The Mighty Message Queues
 
-Using a message queue in the Ingestion layer solves a hell of a lot of complex, distributed system problems ranging from **fault tolerance**, and **consistency** to **scalability** and **availability**. That is the key reason why big observability vendors have been using Kafka heavily in their ingestion pipelines. 
+Using a message queue in the Ingestion layer solves a hell of a lot of complex, distributed system problems ranging from **fault tolerance**, **consistency** to **scalability** and **availability**. That is the key reason why big observability vendors have been using Kafka heavily in their ingestion pipelines. 
 
 Ben Hartshorne from Honeycomb even has a famous saying:
 
