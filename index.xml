@@ -2,19 +2,34 @@
 &lt;p>&lt;img src="https://sumercip.com/yess.png" alt="">&lt;/p>
 &lt;p>Since Python 3.11, there has been a strong, ongoing effort to make Python faster, and the results are clear. Performance improvements are real, and the work continues.&lt;/p>
 &lt;p>It&amp;rsquo;s both refreshing and surprising to see such significant speed gains in a language that&amp;rsquo;s nearly 30 years old.&lt;/p>
-&lt;p>But make no mistake: there&amp;rsquo;s no magic here. In my humble opinion, the success can be attributed to a few key factors:&lt;/p></description></item><item><title>Articles</title><link>https://sumercip.com/articles/</link><pubDate>Sun, 31 Dec 2023 17:47:24 +0300</pubDate><guid>https://sumercip.com/articles/</guid><description>&lt;p>Here are some articles and blog posts mostly related to my work:&lt;/p>
+&lt;p>But make no mistake: there&amp;rsquo;s no magic here. In my humble opinion, the success can be attributed to a few key factors:&lt;/p></description></item><item><title>Articles</title><link>https://sumercip.com/articles/</link><pubDate>Sun, 31 Dec 2023 17:47:24 +0300</pubDate><guid>https://sumercip.com/articles/</guid><description>&lt;p>Here are some articles and blog posts mostly related to my work found at other sites:&lt;/p>
+&lt;h1 id="2023">2023&lt;/h1>
 &lt;ul>
-&lt;li>&lt;a href="https://blog.blackfire.io/profiling-101-for-python-developers-what-is-a-profiler-1-6.html">Profiling 101 for Python Developers&lt;/a>&lt;/li>
-&lt;li>&lt;a href="https://blog.blackfire.io/the-challenges-of-async-python-observability-introduction-to-fastapi-and-asyncio-1-3.html">Challenges of Asynchronous Python profiling&lt;/a>&lt;/li>
-&lt;li>&lt;a href="https://blog.blackfire.io/python-memory-profiling-with-blackfire.html">Memory profiling with Python&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://upsun.com/blog/python-gevent-best-practices/">Gevent Best Practices&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://upsun.com/blog/making-our-project-API-faster-with-blackfire-profiler/">Making our API backend faster with Blackfire Profiler&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="2022">2022&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a href="https://blog.blackfire.io/the-challenges-of-async-python-observability-introduction-to-fastapi-and-asyncio-1-3.html">Challenges of Asynchronous Python profiling&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="2020">2020&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a href="https://blog.blackfire.io/profiling-101-for-python-developers-what-is-a-profiler-1-6.html">Profiling 101 for Python Developers&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://blog.blackfire.io/python-memory-profiling-with-blackfire.html">Memory profiling with Python&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://blog.blackfire.io/analyzing-python-profiles-with-the-blackfire-timeline.html">Blackfire Profiler - Timeline view&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>Talks</title><link>https://sumercip.com/talks/</link><pubDate>Sun, 31 Dec 2023 17:47:24 +0300</pubDate><guid>https://sumercip.com/talks/</guid><description>&lt;p>Here are my recorded talks from various conferences mosly related to performance and observability:&lt;/p>
+&lt;h1 id="2024">2024&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a href="https://kommunity.com/talks/go-ing-easy-on-memory-writing-gc-friendly-code-sumer-cip-33eaefcd/slide">GoKonf Istanbul 2024 - Go-ing Easy on Memory: Writing GC-friendly Code&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="2021">2021&lt;/h1>
 &lt;ul>
 &lt;li>&lt;a href="https://www.youtube.com/watch?v=1EZ8oqjLun0">PyCon US 2021 Sponsor Workshop - Debugging Performance - Sümer Cip &amp;amp; Jérôme Vieilledent&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://www.youtube.com/watch?v=ZBJ30MAlc_0">DjangoCon EU 2021 - Hunting Python Performance&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://www.youtube.com/watch?v=01z4hEaR4SE">DjancoCon 2021 WorkShop - Profiling Django &amp;amp; Python apps - Sümer Cip &amp;amp; Jérôme Vieilledent&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="2020">2020&lt;/h1>
+&lt;ul>
 &lt;li>&lt;a href="https://tr.pycon.org/">PyCon Turkey 2020 - Hunting Performance in Python Code - (Video not available, but details can be seen here)&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>Inside the Go CPU profiler</title><link>https://sumercip.com/posts/inside-the-go-cpu-profiler/</link><pubDate>Mon, 26 Sep 2022 18:42:25 +0300</pubDate><guid>https://sumercip.com/posts/inside-the-go-cpu-profiler/</guid><description>&lt;p>Go is one of its kind when it comes to profiling. It includes powerful and opinionated(!) profilers inside the runtime. Other languages like
 Ruby, Python, or Node.js, contains profilers or a few APIs for writing profilers. But they are limited in scope compared to what Go offers out of the box. If you want to learn more about the types of observability tools that Go provides, I highly recommend Felix Geisendörfer&amp;rsquo;s
