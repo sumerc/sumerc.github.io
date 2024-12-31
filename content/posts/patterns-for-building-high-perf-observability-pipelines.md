@@ -385,6 +385,6 @@ I did not forget this section :) To be _hopefully_ continued in Chapter 2.
 
 There is much more patterns than I listed here, probably even more than I know of. As an example: we did not even touch _Query Execution_ section at all.
 
-I am planning to do a Chapter 2 of this post if I can find time.
+I am planning to do a Chapter 2 of this post if when I find time.
 
 Stay tuned! :)
