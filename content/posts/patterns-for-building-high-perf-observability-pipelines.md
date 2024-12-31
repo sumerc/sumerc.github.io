@@ -2,7 +2,7 @@
 title: "May thy bits chip and shatter:<br> Patterns for Building High-Performance Observability Pipelines at Scale"
 description: "Emerging patterns for scalable, high-performance observability pipelines"
 date: 2024-12-30T18:48:06+03:00
-draft: true
+draft: false
 toc:
   - title: "Motivation"
     id: "motivation"
