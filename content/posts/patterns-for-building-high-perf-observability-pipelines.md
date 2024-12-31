@@ -85,7 +85,7 @@ Let’s walk over some of these characteristics:
 
 - **Unstructured or semi-structured data**: The demand for dimensions in telemetry data is growing, in unstructured nature. 
 
-    For instance, OpenTelemetry defines a custom [LogAttributes](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/2027679fcfa858d0567f4950bffff51585a43c53/exporter/clickhouseexporter/exporter_logs.go#L152) field in its Clickhouse Log exporter to accommodate such needs, storing an arbitrary number of key/value pairs in a Map column.
+    For instance, OpenTelemetry defines a custom [LogAttributes](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/2027679fcfa858d0567f4950bffff51585a43c53/exporter/clickhouseexporter/exporter_logs.go#L152) field in its Clickhouse Log exporter to accommodate such needs, storing an arbitrary number of key/value pairs in a [Clickhouse Map](https://clickhouse.com/docs/en/sql-reference/data-types/map) column.
 
 - **Temporality**: It is highly unlikely that telemetry data older than a month will be accessed. Most of the time, only recent data, spanning a few hours or a few days is queried. In fact, we can even say that the likelihood of the data being accessed drops exponentially with time.
 
