@@ -113,7 +113,7 @@ Now that we've explored some characteristics of telemetry data, let's outline a 
 
 - **“Fast” query times**: Fast is highly subjective. However, we can say that the query should finish ideally in **sub-seconds or in a few seconds at worst**. 
 
-    Here is how this is described in the Observability Engineering book from Honeycomb engineers:
+    Here is how this is described in the [Observability Engineering book](https://www.amazon.com/Observability-Engineering-Achieving-Production-Excellence/dp/1492076449) from Honeycomb engineers:
 
     > If you submit a query and can get a cup of coffee while you wait for results to return, you’re fighting a losing battle with a tool unfit for production.
 
