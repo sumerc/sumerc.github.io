@@ -44,12 +44,12 @@ toc:
 
 ![](/sandworm.png)
 
-As seen from the title, I’m a huge Dune fan. Much like [sandworms](https://en.wikipedia.org/wiki/Sandworm_(Dune)) lurking beneath the surface, ready to appear unexpectedly, the scale and complexity of observability data can be just as massive, unpredictable, and a little terrifying. 
+As seen from the title, I’m a huge _Dune_ fan. Much like [sandworms](https://en.wikipedia.org/wiki/Sandworm_(Dune)) lurking beneath the surface, ready to appear unexpectedly, the scale and complexity of observability data can be just as massive, unpredictable, and a little terrifying. 
 
 > “But I do see a way. There is a narrow way through.”</br>
 > -- Paul Muad'Dib Atreides, Dune Part Two
 
-Sci-fi analogies aside, designing high-throughput observability data pipelines is a topic that fascinates me, with all the unique challenges it brings to database design and architecture. It’s a fascinating intersection of database design and architecture, packed with unique challenges.
+Sci-fi analogies aside, designing high-throughput observability data pipelines is a fascinating intersection of datastore design and architecture, packed with unique challenges.
 
 I’ve always wanted to explore, an ever-evolving topic as a whole. To keep pace, I plan to make additional parts to this topic.
 
@@ -79,7 +79,9 @@ Let’s walk over some of these characteristics:
 
 ![](/dim-card.png)
 
-- **High cardinality**: Some dimensions in telemetry data can have high cardinality. Querying based on high-cardinality fields like `user-id` or `request-id` can be incredibly valuable for debugging complex production issues. However, scaling high-cardinality fields in traditional time-series databases is notoriously difficult as [we will touch](#rethinking-storage-beyond-the-boundaries-of-time-series-databases) soon.(#rethinking-storage-beyond-the-boundaries-of-time-series-databases). For more information, check out [this](https://www.honeycomb.io/getting-started/understanding-high-cardinality-role-observability) and [this](https://blog.cloudflare.com/how-cloudflare-runs-prometheus-at-scale).
+- **High cardinality**: Some dimensions in telemetry data can have high cardinality. Querying based on high-cardinality fields like `user-id` or `request-id` can be incredibly valuable for debugging complex production issues. However, scaling high-cardinality fields in traditional time-series databases is notoriously difficult as [we will touch](#rethinking-storage-beyond-the-boundaries-of-time-series-databases) soon. 
+
+For more information on this topic, please check out [this](https://www.honeycomb.io/getting-started/understanding-high-cardinality-role-observability) and [this](https://blog.cloudflare.com/how-cloudflare-runs-prometheus-at-scale).
 
 ![](/high-card.png)
 
@@ -123,7 +125,7 @@ Now that we've explored some characteristics of telemetry data, let's outline a 
 
     The infrastructure should be capable of handling these large-scale queries efficiently, avoiding sharp spikes in tail latencies. In other words, it needs to manage both the heavy workload of analytical queries and the lighter demands of point queries, ensuring smooth performance across the board.
 
-- **Enough Retention**: We mentioned in the [Anatomy of Telemetry Data](#anatomy-of-telemetry-data) section that older data is unlikely to be accessed. And I have yet to encounter a scenario where I needed to read six-month-old telemetry data to debug an issue in my career. However, it might have use cases in long-term trend analysis or fulfilling regulatory requirements—though, to be honest, I’m not entirely sure.
+- **Enough Retention**: We mentioned in the [Anatomy of Telemetry Data](#anatomy-of-telemetry-data) section that older data is unlikely to be accessed. And I have yet to encounter a scenario where I needed to read six-month-old telemetry data to debug an issue in my career. Maybe it might have use cases in long-term trend analysis or fulfilling regulatory requirements. To be honest, I’m not entirely sure.
 
     I am reading a [post from Observe](https://www.observeinc.com/blog/does-long-term-data-retention-matter-in-observability-users-say-yes/) that asks the users following question:
 
@@ -284,9 +286,9 @@ If I were to start an Observability company today, I would seriously consider th
 
 ## Storage
 
-Storage is where telemetry data stays at rest. 
+Storage phase is all about where telemetry data stays at rest. 
 
-As telemetry data is [immutable](#anatomy-of-telemetry-data), it is written once but read many times and often in high volumes. Thus, we should do our best to transform the received telemetry data in such a way that is optimized for efficient reads. 
+As we have seen, observability data is [immutable](#anatomy-of-telemetry-data). It is written only once but read many times and often in high volumes. Thus, we should do our best to transform the received telemetry data in such a way that is optimized for **efficient reads**. 
 
 ### Pattern 3: DB-nomics: Object Storage for Database Economics
 
@@ -296,11 +298,10 @@ Moreover, it is not uncommon to read GBs or even TBs of data for a single query.
 
 Consequently, object stores become a natural **sweet spot for observability vendors** providing the best durability guarantees while still being cheap.
 
-However, it would be unfair to attribute these characteristics solely to observability workloads. Various industries, such as finance and genetics, and many more has already a strong trend toward utilizing cloud object stores in data warehouses like Snowflake, Amazon Redshift, and Databricks. 
-
-For more details, see Andy Warfield's insightful [talk](https://www.youtube.com/watch?v=sc3J4McebHE). Andy discusses the multifaceted challenges of building a service like S3, beyond just the technical aspects. 
+However, it would be unfair to attribute these characteristics solely to observability workloads. Various industries, such as finance and genetics, and many more has already a strong trend toward utilizing cloud object stores in data warehouses like Snowflake, [Amazon Redshift](https://aws.amazon.com/pm/redshift), and [Databricks](https://www.databricks.com/).
 
 Additionally, a recent paper "[Exploiting Cloud Object Storage for High-Performance Analytics](https://www.vldb.org/pvldb/vol16/p2769-durner.pdf)," delves into the workings, limitations, and cost-effective usage of cloud object stores for analytical workloads.
+
 Nothing is pink clouds, though. Object stores also have their own challenges:
 
 - **Latency**:  It is roughly **~4x times cheaper** on S3 than to store the same bits on a block storage like EBS SSD. 
