@@ -268,7 +268,7 @@ My aim is to show some of the capabilities a message queue like Kafka has to off
 
     > At its core, backpressure is a really simple concept. When the system is nearing overload, it should start “saying no” by slowing down or rejecting requests.
 
-    In our context, this means the system should slow down or reject successful responses until the data is successfully written to the message queue. Consequently, messages will be buffered on the Agent or application until they are ingested successfully. This is where the principle that _"clients are a crucial part of any distributed system"_ comes into play. Backpressure must be managed seamlessly from downstream all the way up to upstream components.
+    In our context, this means the system should slow down or reject successful responses until the data is successfully written to the message queue. Consequently, messages will be buffered on the Agent or application until they are ingested successfully. This is where the principle that **"clients are a crucial part of any distributed system"** comes into play. Backpressure must be managed seamlessly from downstream all the way up to upstream components.
 
 - **Streaming**: A message queue can also be used in real-time stream processing architectures. While not every message queue supports streaming database functionalities, Kafka allows applications to process data as it arrives, enabling use cases like real-time alerting systems. 
 
