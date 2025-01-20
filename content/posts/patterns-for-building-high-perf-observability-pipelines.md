@@ -1,5 +1,5 @@
 ---
-title: "May thy bits chip and shatter:<br> Patterns for Building High-Performance Observability Pipelines at Scale"
+title: "May thy bits chip and shatter: Patterns for Building High-Performance Observability Pipelines at Scale"
 description: "Emerging patterns for building scalable, high-performance observability pipelines"
 date: 2024-12-30T18:48:06+03:00
 draft: false
