@@ -91,7 +91,7 @@ For more information on this topic, please check out [this](https://www.honeycom
 
 - **Temporality**: It is highly unlikely that telemetry data older than a month will be accessed. Most of the time, only recent data, spanning a few hours or a few days is queried. In fact, we can even say that **the likelihood of the data being accessed drops exponentially with time**.
 
-    This is also an important characteristic of telemetry data if you are desining an pipeline over it since this means caching would have enourmous benefits. I remember DataDog achieves [~%98 cache hit rate](https://www.youtube.com/watch?v=mNneCaZewTg) with local caching of telemetry data in their event storage system.
+    This is also an important characteristic of telemetry data as this means caching would have enourmous benefits. I remember DataDog achieves [~%98 cache hit rate](https://www.youtube.com/watch?v=mNneCaZewTg) with local caching of telemetry data in their event storage system.
 
 - **Immutability**: Telemetry data is written once and never modified. There are lots of features that benefit from this useful characteristic. 
 
