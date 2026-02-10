@@ -1,0 +1,13 @@
+{{- $tag := . -}}
+{{- $map := dict
+  "go" "fas fa-fw fa-cogs"
+  "python" "fab fa-fw fa-python"
+  "observability" "fas fa-fw fa-chart-line"
+  "architecture" "fas fa-fw fa-stream"
+  "performance" "fas fa-fw fa-tachometer-alt"
+  "jit" "fas fa-fw fa-bolt"
+  "profiling" "fas fa-fw fa-stopwatch"
+  "cpu" "fas fa-fw fa-microchip"
+  "shell" "fas fa-fw fa-terminal"
+-}}
+{{- index $map $tag -}}
