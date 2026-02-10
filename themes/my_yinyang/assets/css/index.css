@@ -28,7 +28,7 @@ h1 {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 blockquote {
@@ -137,7 +137,7 @@ a:hover {
   font-size: 1.3rem;
   font-weight: 700;
   margin-top: 32px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .logo__cursor {
@@ -171,7 +171,7 @@ a:hover {
 .header-item {
   margin: 0 5px;
   font-weight: 600;
-  font-family: Poppins;
+  font-family: Inter;
 }
 
 .header-line {
@@ -201,7 +201,7 @@ a:hover {
 .posts-title {
   font-size: 1.2rem;
   font-weight: 600;
-  font-family: 'Poppins';
+  font-family: 'Inter';
 }
 
 .posts-title-row {
@@ -218,8 +218,8 @@ a:hover {
 .post-icons i {
   margin-left: 6px;
   color: #000;
-  font-size: 1.2em;
-  border: 2.5px solid #000;
+  font-size: 1.0em;
+  border: 2px solid #000;
   border-radius: 4px;
   padding: 4px;
 }
@@ -400,7 +400,7 @@ details.toc-container summary {
   font-weight: bold;
   cursor: pointer;
   background: lightgrey;
-  font-family: Poppins;
+  font-family: Inter;
 }
 
 details.toc-container {
@@ -438,7 +438,7 @@ h2.post-desc {
 h1.post-title {
   line-height: 1.3;
   margin-top: 10px;
-  font-family: Poppins;
+  font-family: Inter;
   font-weight: 700;
 }
 
