@@ -21,19 +21,17 @@ Hugo must be installed (`brew install hugo` on macOS).
 - **config.toml** — Site config: base URL, theme selection, markdown/syntax settings, nav links
 - **content/posts/** — Blog posts in Markdown with YAML frontmatter (title, date, draft, description, images)
 - **content/{about,articles,talks}.md** — Standalone pages (articles/talks link to external content)
-- **themes/my_yinyang/** — Customized fork of hugo-theme-yinyang (git submodule pointing to sumerc/hugo-theme-yinyang)
-- **static/** — Images, favicons, diagrams referenced in posts
+- **themes/my_yinyang/** — Inlined theme (originally forked from hugo-theme-yinyang)
+- **static/** — Images, diagrams referenced in posts
 - **layouts/** — Project-level Hugo template overrides (takes precedence over theme templates)
 
 ## Theme (my_yinyang)
 
-Git submodule — changes to theme files should be committed in the submodule repo, not this repo.
+Inlined directly in the repo (no submodule). Edit theme files in place.
 
 Key theme files:
 - `themes/my_yinyang/layouts/partials/` — head.html, header.html, footer.html, seo.html
-- `themes/my_yinyang/assets/css/index.css` — Main stylesheet (fonts: Poppins for headings, Inter for body, Fira Code for code)
-
-Patch files (`my_theme_changes.patch`, `themes/my_yinyang/my_logo.patch`) document past customizations.
+- `themes/my_yinyang/assets/css/index.css` — Main stylesheet (fonts: Poppins for headings, Inter for body, Geist Mono for code)
 
 ## Deployment
 
