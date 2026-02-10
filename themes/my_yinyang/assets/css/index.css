@@ -217,18 +217,22 @@ a:hover {
 
 .post-icons i {
   margin-left: 6px;
-  color: #000;
+  color: #FED6A1;
   font-size: 1.0em;
-  border: 2px solid #000;
+  background-color: #000;
+  border: none;
   border-radius: 4px;
-  padding: 4px;
+  width: 1.6em;
+  height: 1.6em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .post-icons i:hover {
   background-color: #F41D92;
-  border-color: #F41D92;
   color: #fff;
 }
 
