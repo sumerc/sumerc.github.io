@@ -218,12 +218,12 @@ a:hover {
 .post-icons i {
   margin-left: 6px;
   color: #FED6A1;
-  font-size: 1.2em;
+  font-size: 1.0em;
   background-color: #000;
   border: none;
   border-radius: 8px;
-  width: 1.4em;
-  height: 1.4em;
+  width: 1.6em;
+  height: 1.6em;
   display: inline-flex;
   align-items: center;
   justify-content: center;
