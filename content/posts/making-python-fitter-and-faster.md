@@ -3,6 +3,7 @@ title: "In the Making of Python Fitter and Faster"
 description: "How Python's recent performance improvements work under the hood"
 date: 2024-10-04T18:49:37+03:00
 draft: false
+tags: ["python", "performance"]
 toc:
   - title: "Python’s Performance Revolution"
     id: "pythons-performance-revolution"
