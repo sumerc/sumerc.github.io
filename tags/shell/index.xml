@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Shell on Welcome! | Sümer Cip</title><link>https://sumercip.com/tags/shell/</link><description>Recent content in Shell on Welcome! | Sümer Cip</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 31 Dec 2021 11:29:57 +0300</lastBuildDate><atom:link href="https://sumercip.com/tags/shell/index.xml" rel="self" type="application/rss+xml"/><item><title>Improve zsh startup time via lazyload</title><link>https://sumercip.com/posts/lazyload-zsh/</link><pubDate>Fri, 31 Dec 2021 11:29:57 +0300</pubDate><guid>https://sumercip.com/posts/lazyload-zsh/</guid><description>&lt;h1 id="my-shell-is-slooow"&gt;My shell is slooow!&lt;/h1&gt;
+&lt;p&gt;This is my first blog post for years. I have been finding excuses for not writing one over
+the years, but I feel this is the right time.&lt;/p&gt;
+&lt;p&gt;I was coding as usual when I started something odd with my shell. I have done few adjustments
+to my &lt;code&gt;.zshrc&lt;/code&gt; file and out of a sudden it became very slow to spawn a new shell. As a person
+who has a obsession with performance, it became my duty to find out the problem.&lt;/p&gt;</description></item></channel></rss>

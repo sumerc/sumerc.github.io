@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>O11y on Welcome! | Sümer Cip</title><link>https://sumercip.com/tags/o11y/</link><description>Recent content in O11y on Welcome! | Sümer Cip</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 30 Dec 2024 18:48:06 +0300</lastBuildDate><atom:link href="https://sumercip.com/tags/o11y/index.xml" rel="self" type="application/rss+xml"/><item><title>May thy bits chip and shatter: Patterns for Building High-Performance Observability Pipelines at Scale</title><link>https://sumercip.com/posts/patterns-for-building-high-perf-observability-pipelines/</link><pubDate>Mon, 30 Dec 2024 18:48:06 +0300</pubDate><guid>https://sumercip.com/posts/patterns-for-building-high-perf-observability-pipelines/</guid><description>&lt;h1 id="motivation"&gt;Motivation&lt;/h1&gt;
+&lt;p&gt;&lt;img src="https://sumercip.com/sandworm.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;As seen from the title, I’m a huge &lt;em&gt;Dune&lt;/em&gt; fan. Much like &lt;a href="https://en.wikipedia.org/wiki/Sandworm_(Dune)"&gt;sandworms&lt;/a&gt; lurking beneath the surface, ready to appear unexpectedly, the scale and complexity of observability data can be just as massive, unpredictable, and a little terrifying.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“But I do see a way. There is a narrow way through.”&lt;/br&gt;
+&amp;ndash; Paul Muad&amp;rsquo;Dib Atreides, Dune Part Two&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Sci-fi analogies aside, designing high-throughput observability data pipelines is a fascinating intersection of datastore design and architecture, packed with unique challenges.&lt;/p&gt;</description></item></channel></rss>
