@@ -3,7 +3,8 @@
 &lt;p&gt;As seen from the title, I’m a huge &lt;em&gt;Dune&lt;/em&gt; fan. Much like &lt;a href="https://en.wikipedia.org/wiki/Sandworm_(Dune)"&gt;sandworms&lt;/a&gt; lurking beneath the surface, ready to appear unexpectedly, the scale and complexity of observability data can be just as massive, unpredictable, and a little terrifying.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;“But I do see a way. There is a narrow way through.”&lt;/br&gt;
-&amp;ndash; Paul Muad&amp;rsquo;Dib Atreides, Dune Part Two&lt;/p&gt;&lt;/blockquote&gt;
+&amp;ndash; Paul Muad&amp;rsquo;Dib Atreides, Dune Part Two&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;Sci-fi analogies aside, designing high-throughput observability data pipelines is a fascinating intersection of datastore design and architecture, packed with unique challenges.&lt;/p&gt;</description></item><item><title>In the Making of Python Fitter and Faster</title><link>https://sumercip.com/posts/making-python-fitter-and-faster/</link><pubDate>Fri, 04 Oct 2024 18:49:37 +0300</pubDate><guid>https://sumercip.com/posts/making-python-fitter-and-faster/</guid><description>&lt;h1 id="pythons-performance-revolution"&gt;Python’s Performance Revolution&lt;/h1&gt;
 &lt;p&gt;&lt;img src="https://sumercip.com/yess.png" alt=""&gt;&lt;/p&gt;
 &lt;p&gt;Since Python 3.11, there has been a strong, ongoing effort to make Python faster, and the results are clear. Performance improvements are real, and the work continues.&lt;/p&gt;
