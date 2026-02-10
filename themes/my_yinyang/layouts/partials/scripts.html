@@ -1,0 +1,41 @@
+{{ if and .Site.Params.lazyImage (not .IsHome) -}}
+<script src="{{ .Site.Params.staticPrefix }}{{ "js/lazyload.min.js" | relURL }}"></script>
+<script>
+  var lazyImage = new LazyLoad({
+    container: document.getElementById('article')
+  });
+</script>
+{{ end }}
+
+<script>
+  (function(window, document) {
+      const progressIndicatorForElement = document.querySelector('[data-progress-indicator]');
+      if (!progressIndicatorForElement) {
+          return;
+      }
+
+      const progressElement = document.createElement('div');
+      progressElement.classList.add('progress-indicator');
+
+      progressElement.style.left = "-100%";
+      progressElement.style.transform = "translateX(-100%)";
+
+      document.body.appendChild(progressElement);
+
+      let lastKnownScrollPosition = 0;
+      let ticking = false;
+
+      window.addEventListener('scroll', function(e) {
+          lastKnownScrollPosition = window.scrollY;
+          if (ticking) {
+              return;
+          }
+          window.requestAnimationFrame(function() {
+              var offset = Math.min(100, lastKnownScrollPosition / (progressIndicatorForElement.scrollHeight - window.innerHeight) * 100);
+              progressElement.style.transform = `translateX(${offset}%)`;
+              ticking = false;
+          });
+          ticking = true;
+      });
+  })(window, document);
+</script>

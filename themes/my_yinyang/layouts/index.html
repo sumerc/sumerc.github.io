@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}" prefix="og: http://ogp.me/ns#">
+{{ partial "head.html" . }}
+
+<body>
+  <article class="posts">
+    <div class="row">
+      <div class="col-xs-12">
+        {{ partial "header.html" . }}
+        <div id="posts-list">
+          {{ range (where site.RegularPages "Type" "in" site.Params.mainSections).GroupByDate "2006" -}}
+          <section>
+
+            {{ range .Pages }}
+            <div class="row posts-line">
+              <div class="posts-title col-xs-12">
+                <div class="row">
+                  <div class="posts-date col-xs-12">
+                    <time datetime="{{ .Date.Format "02 Jan 2006" }}">{{ .Date.Format "02 Jan 2006"}}</time>
+                  </div>
+                  <div class="col-xs-12">
+                    <a href="{{ .RelPermalink }}">{{ .Title | safeHTML }}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{ end }}
+          </section>
+          {{ end }}
+        </div>
+
+        {{ partial "footer.html" . }}
+      </div>
+    </div>
+  </article>
+
+  {{ partial "scripts.html" . }}
+</body>
+
+</html>
