@@ -222,6 +222,14 @@ a:hover {
   border: 2px solid #000;
   border-radius: 4px;
   padding: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.post-icons i:hover {
+  background-color: #F41D92;
+  border-color: #F41D92;
+  color: #fff;
 }
 
 .posts-line {
