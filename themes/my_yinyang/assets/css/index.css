@@ -204,6 +204,26 @@ a:hover {
   font-family: 'Poppins';
 }
 
+.posts-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-icons {
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.post-icons i {
+  margin-left: 6px;
+  color: #000;
+  font-size: 1.2em;
+  border: 2.5px solid #000;
+  border-radius: 4px;
+  padding: 4px;
+}
+
 .posts-line {
   font-size: 1.2rem;
   margin: 20px 0;

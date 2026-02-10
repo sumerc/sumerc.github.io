@@ -18,8 +18,13 @@
                   <div class="posts-date col-xs-12">
                     <time datetime="{{ .Date.Format "02 Jan 2006" }}">{{ .Date.Format "02 Jan 2006"}}</time>
                   </div>
-                  <div class="col-xs-12">
+                  <div class="col-xs-12 posts-title-row">
                     <a href="{{ .RelPermalink }}">{{ .Title | safeHTML }}</a>
+                    {{ with .Params.tags }}
+                    <span class="post-icons">
+                      {{ range . }}{{ $tag := . }}{{ $icon := partial "tag-icon.html" . }}{{ with $icon }}<i class="{{ . }}" title="{{ $tag }}"></i>{{ end }}{{ end }}
+                    </span>
+                    {{ end }}
                   </div>
                 </div>
               </div>

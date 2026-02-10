@@ -2,6 +2,9 @@
 title: "Improve zsh startup time via lazyload"
 date: 2021-12-31T11:29:57+03:00
 draft: false
+tags:
+  - shell
+  - performance
 ---
 
 # My shell is slooow!

@@ -3,6 +3,10 @@ title: "Inside the Go CPU profiler"
 description: "How does the Go CPU profiler works under the hood?"
 date: 2022-09-26T18:42:25+03:00
 draft: false
+tags:
+  - go
+  - profiling
+  - cpu
 toc:
   - title: "Basics"
     id: "basics"
