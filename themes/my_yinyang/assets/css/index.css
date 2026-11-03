@@ -15,7 +15,7 @@
 
 body {
   font-family: "Inter", sans-serif;
-  line-height: 1.5;
+  line-height: 1.62;
   -webkit-font-smoothing: antialiased;
   margin: 0 20px;
   background-color: #FED6A1;
@@ -104,7 +104,7 @@ a:hover {
   box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
   border: 1px solid rgba(0, 0, 0, 0.05);
   margin: 0;
-  line-height: normal;
+  line-height: 1.45;
 }
 
 .markdown-body code {
@@ -210,32 +210,6 @@ a:hover {
   align-items: center;
 }
 
-.post-icons {
-  white-space: nowrap;
-  margin-left: 12px;
-}
-
-.post-icons i {
-  margin-left: 6px;
-  color: #FED6A1;
-  font-size: 1.0em;
-  background-color: #000;
-  border: none;
-  border-radius: 8px;
-  width: 1.6em;
-  height: 1.6em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-}
-
-.post-icons i:hover {
-  background-color: #F41D92;
-  color: #fff;
-}
-
 .posts-line {
   font-size: 1.2rem;
   margin: 20px 0;
@@ -297,7 +271,7 @@ hr:after {
 }
 
 .post-content p {
-  hyphens: auto;
+  hyphens: manual;
   text-justify: ideographic;
   margin-bottom: 1.1em;
 }
@@ -520,4 +494,157 @@ h1.post-title {
 .citation:hover,
 .citation-tooltip:hover {
   outline: none;
+}
+
+/* Sidenotes: footnotes shown beside the text on screens wider than a phone in
+   portrait. Keep the 640px breakpoint in sync with WIDE_QUERY in
+   static/js/sidenotes.js. */
+.post-body {
+  position: relative;
+}
+
+.sidenotes {
+  display: none;
+}
+
+/* Below desktop width there's no room in the page margin, so on posts with
+   footnotes narrow the text column and reserve a right gutter for the notes.
+   This covers phones in landscape and tablets. */
+@media (min-width: 640px) and (max-width: 1149.98px) {
+  article.has-footnotes {
+    --sidenote-gap: 1.25rem;
+    --sidenote-width: clamp(9rem, 26vw, 15rem);
+    max-width: calc(680px + var(--sidenote-gap) + var(--sidenote-width));
+    padding-right: calc(var(--sidenote-gap) + var(--sidenote-width));
+  }
+
+  .sidenotes {
+    left: calc(100% + var(--sidenote-gap));
+    width: var(--sidenote-width);
+  }
+
+  .sidenote {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+}
+
+@media (min-width: 1150px) {
+  .sidenotes {
+    left: calc(100% + 2.5rem);
+    /* Fill the right margin, leaving some room before the viewport edge. */
+    width: min(15rem, calc(50vw - 50% - 4rem));
+  }
+}
+
+@media (min-width: 640px) {
+  .sidenotes {
+    display: block;
+    position: absolute;
+    top: 0;
+  }
+
+  /* Visually hide the end-of-post list but keep it for screen readers. */
+  .has-sidenotes .footnotes {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+.sidenote {
+  position: absolute;
+  left: 0;
+  right: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: rgba(0, 0, 0, 0.62);
+  border-left: 2px solid transparent;
+  padding-left: 0.6rem;
+  margin-left: -0.6rem;
+  transition: border-color 120ms ease-in-out, color 120ms ease-in-out;
+}
+
+.sidenote p {
+  margin: 0 0 0.5em;
+}
+
+.sidenote p:last-child {
+  margin-bottom: 0;
+}
+
+.sidenote code {
+  font-size: 0.9em;
+}
+
+.sidenote__label {
+  float: left;
+  font-weight: 600;
+  margin-right: 0.4em;
+}
+
+.sidenote__label::after {
+  content: ".";
+}
+
+.sidenote.is-active {
+  border-left-color: #F41D92;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.footnote-ref {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 0 0.15em;
+  border-radius: 2px;
+  transition: background-color 120ms ease-in-out;
+}
+
+.footnote-ref.is-active {
+  background-color: rgba(244, 29, 146, 0.18);
+}
+
+/* Heading anchors: a # that appears when the pointer is on the heading. */
+.post-content h1, .post-content h2, .post-content h3, .post-content h4 {
+  scroll-margin-top: 1.5rem;
+}
+
+.anchor {
+  margin-left: 0.4em;
+  font-weight: 400;
+  color: #F41D92;
+  text-decoration: none !important;
+  opacity: 0.45;
+}
+
+@media (hover: hover) {
+  .anchor {
+    opacity: 0;
+    transition: opacity 120ms ease-in-out;
+  }
+
+  :is(h1, h2, h3, h4):hover > .anchor,
+  .anchor:focus {
+    opacity: 0.8;
+  }
+}
+
+/* Figures: the image's alt text doubles as its caption. */
+.post-content .figure {
+  display: block;
+  margin: 1.2em 0;
+}
+
+.post-content .figcaption {
+  display: block;
+  text-align: center;
+  color: #747474;
+  font-size: 0.85em;
+  font-style: italic;
+  margin-top: 0.5em;
 }

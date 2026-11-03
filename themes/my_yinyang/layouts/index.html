@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}" prefix="og: http://ogp.me/ns#">
+<html lang="{{ .Site.Language.Locale }}" prefix="og: http://ogp.me/ns#">
 {{ partial "head.html" . }}
 
 <body>
@@ -20,11 +20,6 @@
                   </div>
                   <div class="col-xs-12 posts-title-row">
                     <a href="{{ .RelPermalink }}">{{ .Title | safeHTML }}</a>
-                    {{ with .Params.tags }}
-                    <span class="post-icons">
-                      {{ range . }}{{ $tag := . }}{{ $icon := partial "tag-icon.html" . }}{{ with $icon }}<i class="{{ . }}" title="{{ $tag }}"></i>{{ end }}{{ end }}
-                    </span>
-                    {{ end }}
                   </div>
                 </div>
               </div>

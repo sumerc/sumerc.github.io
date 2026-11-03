@@ -3,14 +3,14 @@
 {{ partial "head.html" . }}
 
 <body>
-  <article class="post {{ .Site.Language.LanguageName }}" id="article">
+  {{ $hasFootnotes := in (string .Content) `class="footnotes"` }}
+  <article class="post {{ if $hasFootnotes }} has-footnotes{{ end }}" id="article">
     <div class="row">
       <div class="col-xs-12">
         <div class="site-header">
           {{ partial "header.html" . }}
         </div>
         <header class="post-header">
-          </br>
           {{ if in .Site.Params.mainSections .Type }}
           <div class="row post-desc">
             <div class="col-xs-12">
@@ -55,11 +55,12 @@
       {{ end }}
 
       <hr>
-      </hr>
 
-        <div class="post-content markdown-body" data-progress-indicator>
-          {{ .Site.Params.postHeaderContent | safeHTML }}
-          {{ .Content }}
+        <div class="post-body">
+          <div class="post-content markdown-body" data-progress-indicator>
+            {{ .Site.Params.postHeaderContent | safeHTML }}
+            {{ .Content }}
+          </div>
         </div>
 
         <div class="row middle-xs">
@@ -99,6 +100,9 @@
   </article>
 
   {{ partial "scripts.html" . }}
+  {{ if $hasFootnotes }}
+  <script defer src="{{ "js/sidenotes.js" | relURL }}"></script>
+  {{ end }}
   {{ if .Site.Params.extraBody }}
   {{ .Site.Params.extraBody | safeHTML }}
   {{ end }}

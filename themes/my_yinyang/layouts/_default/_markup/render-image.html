@@ -1,0 +1,7 @@
+{{- /* Hugo keeps the surrounding <p>, so use spans: a <figure> inside <p> is invalid HTML. */ -}}
+{{- $img := printf `<img src="%s" alt="%s"%s loading="lazy">` .Destination .Text (cond (ne .Title "") (printf ` title="%s"` .Title) "") -}}
+{{- if ne .Text "" -}}
+<span class="figure">{{ $img | safeHTML }}<span class="figcaption">{{ .Text }}</span></span>
+{{- else -}}
+{{ $img | safeHTML }}
+{{- end -}}

@@ -34,7 +34,7 @@
   <meta property="og:description" content="{{ default .Summary .Description | plainify }}" />
   <meta name="description" content="{{ default .Summary .Description | plainify }}" />
   {{- end }}
-  <meta property="og:locale" content="{{ .Site.LanguageCode }}" />
+  <meta property="og:locale" content="{{ .Site.Language.Locale }}" />
   {{- if .Params.album -}}
   <meta property="og:image" content="{{ .Params.album }}" />
   {{ end }}
@@ -43,7 +43,6 @@
     <style>{{ .Content | safeCSS }}</style>
   {{ end }}
 
-  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Geist+Mono:wght@400&family=Source+Serif+Pro&display=swap" onload="this.onload=null;this.rel='stylesheet'">
